@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - AgriPlate</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+        .logo img {
+            width: 120px;
+        }
+
+        .auth-buttons a {
+            color: #4CAF50;
+            background-color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+            border: 2px solid #4CAF50;
+        }
+
+        .auth-buttons a:hover {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        main {
+            text-align: center;
+            padding: 40px 20px;
+            flex-grow: 1;  /* This allows main content to grow and take available space */
+        }
+
+        h1 {
+            font-size: 2em;
+            color: #4CAF50;
+        }
+
+        form {
+            display: inline-block;
+            text-align: left;
+            margin-top: 20px;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            font-size: 1em;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #4CAF50;
+            color: white;
+            font-size: 1em;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        footer {
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <img src="c:/Users/hamza/Downloads/462562198_1103487334732019_7215644507738509228_n.png" alt="AgriPlate Logo">
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <h1>Login</h1>
+        <form action="login.php" method="POST" onsubmit="return validateLoginForm()">
+            <label for="email">Email</label>
+            <input type="text" id="email" name="email" required>
+
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required>
+
+            <button type="submit">Login</button>
+        </form>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 AgriPlate. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // JavaScript for form validation
+        function validateLoginForm() {
+            let email = document.getElementById('email').value;
+            let password = document.getElementById('password').value;
+
+            if (email === "" || password === "") {
+                alert("Both fields are required!");
+                return false;
+            }
+            return true;
+        }
+    </script>
+</body>
+</html>
