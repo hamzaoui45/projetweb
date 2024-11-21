@@ -46,6 +46,22 @@ if (
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add User</title>
     <style>
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
@@ -85,6 +101,16 @@ if (
             font-size: 14px;
         }
     </style>
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <img src="C:\xampp\htdocs\projet web\view\admin\assets\logo.png" alt="AgriPlate Logo">
+            </div>
+            <div class="auth-buttons">
+                <a href="index.html">Home</a>
+            </div>
+        </div>
+    </header>
 </head>
 
 <body>

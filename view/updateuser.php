@@ -101,9 +101,14 @@ if ($valid == 1) {
             <label for="adresse">Address:</label>
             <input type="text" id="adresse" name="adresse" value="<?php echo $user['adresse']; ?>"><br>
 
-            <label for="role">Role:</label>
-            <input type="text" id="role" name="role" value="<?php echo $user['role']; ?>"><br>
-
+            <div class="mb-3">
+            <label for="role" class="form-label">Role</label>
+            <select class="form-select" id="role" name="role" required>
+                <option value="0" <?= $user['role'] == 0 ? 'selected' : '' ?>>client</option>
+                <option value="1" <?= $user['role'] == 1 ? 'selected' : '' ?>>farmer</option>
+                <option value="2" <?= $user['role'] == 2 ? 'selected' : '' ?>>admin</option>
+            </select>
+        </div>
             <input type="submit" value="Save">
         </form>
     <?php else: ?>

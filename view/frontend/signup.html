@@ -193,49 +193,73 @@
                 <label for="farmer">Farmer</label>
             </div>
 
-            <!-- Client Form -->
-            <div id="clientForm" class="hidden">
-                <div class="form-header">
-                    <h2>Client Sign-Up</h2>
-                </div><form method="post" action="adduser.php">
-                <label for="clientName">Full Name</label>
-                <input type="text" id="nom" placeholder="Enter your full name">
-                <label for="clientName">nomFamille</label>
-                <input type="text" id="nomFamille" placeholder="Enter your full name">
-                 <label for="clientEmail">Email Address</label>
-                <input type="email" id="Email" placeholder="Enter your email">
-                <label for="clientPassword">Password</label>
-                <input type="password" id="password" placeholder="Enter your password">
-                <label for="tel" class="form-label">Telephone</label>
-                <input type="text" class="form-control" id="tel" name="tel" >
-                <label for="clientAddress">Residential Address</label>
-                <input type="text" id="adress" placeholder="Enter your address">
-                <button type="button" onclick="validateClientForm()">Sign Up as Client</button>
-            </div>
-        </form>
-            <form method="post" action="adduser.php">
-            <!-- Farmer Form -->
-            <div id="farmerForm" class="hidden">
-                <div class="form-header">
-                    <h2>Farmer Sign-Up</h2>
+            <form method="POST" action="adduser.php">
+                <!-- Client Form -->
+                <div id="clientForm" class="hidden">
+                    <div class="form-header">
+                        <h2>Client Sign-Up</h2>
+                    </div>
+                    <label for="nom">Full Name</label>
+                    <input type="text" class="user" name="nom" placeholder="Enter your full name" required>
+            
+                    <label for="nomFamille">nomFamille</label>
+                    <input type="text" class="user" name="nomFamille" placeholder="Enter your family name" required>
+                    
+                    <label for="email">Email Address</label>
+                    <input type="email" class="user" name="email" placeholder="Enter your email" required>
+                    
+                    <label for="password">Password</label>
+                    <input type="password" class="user" name="password" placeholder="Enter your password" required>
+                    
+                    <label for="tel">Telephone</label>
+                    <input type="text" class="user" name="tel" placeholder="Enter your phone number" required>
+                    
+                    <label for="adresse">Residential Address</label>
+                    <input type="text" class="user" name="adresse" placeholder="Enter your address" required>
+                    
+                    <label for="role">Role</label>
+                    <select name="role" class="user" required>
+                        <option value="client">Client</option>
+                        <option value="farmer">Farmer</option>
+                    </select>
+            
+                    <button type="submit" name="submit" value="client">Sign Up as Client</button>
                 </div>
-                <label for="farmerName">nom</label>
-                <input type="text" id="nom" placeholder="Enter your full name">
-                <label for="clientName">nomFamille</label>
-                <input type="text" id="nomFamille" placeholder="Enter your full name">
-                <label for="farmerEmail">Email Address</label>
-                <input type="email" id="email" placeholder="Enter your email">
-                <label for="farmerPassword">Password</label>
-                <input type="password" id="assword" placeholder="Enter your password">
-                <label for="tel" class="form-label">Telephone</label>
-                <input type="text" class="form-control" id="tel" name="tel" required>
-                <label for="farmLocation">Farm Name</label>
-                <input type="text" id="farm_name" placeholder="Enter your farm location">
-                <label for="products">Products Offered</label>
-                
-                <button type="button" onclick="validateFarmerForm()">Sign Up as Farmer</button>
-            </div>
-        </form>
+            </form>
+            
+            <form method="POST" action="adduser.php">
+                <!-- Farmer Form -->
+                <div id="farmerForm" class="hidden">
+                    <div class="form-header">
+                        <h2>Farmer Sign-Up</h2>
+                    </div>
+                    <label for="nom">Full Name</label>
+                    <input type="text" class="user" name="nom" placeholder="Enter your full name" required>
+            
+                    <label for="nomFamille">nomFamille</label>
+                    <input type="text" class="user" name="nomFamille" placeholder="Enter your family name" required>
+                    
+                    <label for="email">Email Address</label>
+                    <input type="email" class="user" name="email" placeholder="Enter your email" required>
+                    
+                    <label for="password">Password</label>
+                    <input type="password" class="user" name="password" placeholder="Enter your password" required>
+                    
+                    <label for="tel">Telephone</label>
+                    <input type="text" class="user" name="tel" placeholder="Enter your phone number" required>
+                    
+                    <label for="adresse">Farm Location</label>
+                    <input type="text" class="user" name="adresse" placeholder="Enter your farm location" required>
+                    
+                    <label for="role">Role</label>
+                    <select name="role" class="user" required>
+                        <option value="farmer">Farmer</option>
+                    </select>
+            
+                    <button type="submit" name="submit" value="farmer">Sign Up as Farmer</button>
+                </div>
+            </form>
+            
         </div>
     </main>
 
@@ -244,71 +268,132 @@
     </footer>
 
     <script>
+        // Toggles between Client and Farmer forms
         function toggleForm(formId) {
             document.getElementById('clientForm').classList.add('hidden');
             document.getElementById('farmerForm').classList.add('hidden');
             document.getElementById(formId).classList.remove('hidden');
         }
-
+    
+        // Validates the Client form
         function validateClientForm() {
-            const name = document.getElementById('clientName').value.trim();
-            const email = document.getElementById('clientEmail').value.trim();
-            const password = document.getElementById('clientPassword').value.trim();
-            const address = document.getElementById('clientAddress').value.trim();
-
-            if (!name) {
-                alert("Name is required.");
+            const nom = document.querySelector('#clientForm input[name="nom"]').value.trim();
+            const nomFamille = document.querySelector('#clientForm input[name="nomFamille"]').value.trim();
+            const email = document.querySelector('#clientForm input[name="email"]').value.trim();
+            const password = document.querySelector('#clientForm input[name="password"]').value.trim();
+            const tel = document.querySelector('#clientForm input[name="tel"]').value.trim();
+            const adresse = document.querySelector('#clientForm input[name="adresse"]').value.trim();
+    
+            if (!validateName(nom)) {
+                alert("Full Name must contain only letters and spaces.");
+                return false;
+            }
+            if (!validateName(nomFamille)) {
+                alert("Family Name must contain only letters and spaces.");
                 return false;
             }
             if (!validateEmail(email)) {
                 alert("Invalid email format.");
                 return false;
             }
-            if (password.length < 8) {
+            if (!validatePassword(password)) {
                 alert("Password must be at least 8 characters long.");
                 return false;
             }
-            if (address.length < 5) {
+            if (!validatePhone(tel)) {
+                alert("Invalid phone number format.");
+                return false;
+            }
+            if (adresse.length < 5) {
                 alert("Address must be at least 5 characters long.");
                 return false;
             }
+    
             alert("Client sign-up successful!");
+            return true;
         }
-
+    
+        // Validates the Farmer form
         function validateFarmerForm() {
-            const name = document.getElementById('farmerName').value.trim();
-            const email = document.getElementById('farmerEmail').value.trim();
-            const password = document.getElementById('farmerPassword').value.trim();
-            const location = document.getElementById('farmLocation').value.trim();
-            const products = document.getElementById('products').value.trim();
-
-            if (!name) {
-                alert("Name is required.");
+            const nom = document.querySelector('#farmerForm input[name="nom"]').value.trim();
+            const nomFamille = document.querySelector('#farmerForm input[name="nomFamille"]').value.trim();
+            const email = document.querySelector('#farmerForm input[name="email"]').value.trim();
+            const password = document.querySelector('#farmerForm input[name="password"]').value.trim();
+            const tel = document.querySelector('#farmerForm input[name="tel"]').value.trim();
+            const adresse = document.querySelector('#farmerForm input[name="adresse"]').value.trim();
+    
+            if (!validateName(nom)) {
+                alert("Full Name must contain only letters and spaces.");
+                return false;
+            }
+            if (!validateName(nomFamille)) {
+                alert("Family Name must contain only letters and spaces.");
                 return false;
             }
             if (!validateEmail(email)) {
                 alert("Invalid email format.");
                 return false;
             }
-            if (password.length < 8) {
+            if (!validatePassword(password)) {
                 alert("Password must be at least 8 characters long.");
                 return false;
             }
-            if (location.length < 5) {
-                alert("Farm location must be at least 5 characters long.");
+            if (!validatePhone(tel)) {
+                alert("Invalid phone number format.");
                 return false;
             }
-            if (!products) {
-                alert("You must list at least one product.");
+            if (adresse.length < 5) {
+                alert("Farm Location must be at least 5 characters long.");
                 return false;
             }
+    
             alert("Farmer sign-up successful!");
+            return true;
         }
-
+    
+        // Helper: Validates name fields
+        function validateName(name) {
+            const namePattern = /^[a-zA-ZÀ-ÿ\s]+$/;
+            return namePattern.test(name);
+        }
+    
+        // Helper: Validates email format
         function validateEmail(email) {
             const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             return emailPattern.test(email);
         }
+    
+        // Helper: Validates password length
+        function validatePassword(password) {
+            return password.length >= 8;
+        }
+    
+        // Helper: Validates phone numbers
+        function validatePhone(phone) {
+            const phonePattern = /^\+?[0-9\s\-]+$/;
+            return phonePattern.test(phone);
+        }
+    
+        document.querySelectorAll('form').forEach((form) => {
+            form.addEventListener('submit', function (e) {
+            let valid = false;
+        
+            if (form.contains(document.querySelector('#clientForm'))) {
+                valid = validateClientForm();
+        }     else if (form.contains(document.querySelector('#farmerForm'))) {
+                 valid = validateFarmerForm();
+             }
+        
+            if (valid) {
+                alert("Sign-up successful! Redirecting to home page...");
+                window.location.href = "redirectindex.html"; 
+        } else {
+            e.preventDefault(); // Prevent form submission
+        }
+    });
+});
+
     </script>
+    
 </body>
 </html>
