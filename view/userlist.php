@@ -42,9 +42,8 @@ $list = $userC->userList(); // Fetch the list of users
                 <td><?= $user['role']; ?></td>
                 <td>
                     <!-- Form to update user -->
-                    <form method="POST" action="updateUser.php">
-                        <input type="submit" name="update" value="Update">
-                        <input type="hidden" value="<?= $user['id']; ?>" name="id">
+                    <form method="POST" action="updateuser.php?id=<?=$user['id']?> ">
+                        <input type="submit" name="update" value="Update">  
                     </form>
                     <!-- Link to delete user -->
                     <a href="deleteUser.php?id=<?= $user['id']; ?>">Delete</a>

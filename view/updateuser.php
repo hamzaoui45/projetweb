@@ -1,49 +1,67 @@
 <?php
-include "../Model/user.php";
-include "../Controller/usercontroller.php";
+session_start();
+include '../Controller/usercontroller.php';
+include '../Model/User.php';
 
-$user = null;
+$id = $_GET['id'];
 $error = "";
 
 // Create an instance of the controller
-$userController = new usercontroller();
+$userC = new UserController();
+$user = $userC->getUserById($id); // Fetch the user details
 
-// Check if the necessary keys exist and are not empty
+$valid = 0;
+
+// Check if the form is submitted and required fields are set
 if (
-    isset($_POST["nom"]) && isset($_POST["nomFamille"]) &&
-    isset($_POST["email"]) && isset($_POST["password"]) &&
-    isset($_POST["tel"]) && isset($_POST["adresse"]) &&
-    isset($_POST["role"])
+    isset($_POST["nom"]) &&
+    isset($_POST["nomFamille"]) &&
+    isset($_POST["email"]) &&
+    isset($_POST["password"]) &&
+    isset($_POST["role"]) // Role field
 ) {
-    if (
-        !empty($_POST["nom"]) && !empty($_POST["nomFamille"]) &&
-        !empty($_POST["email"]) && !empty($_POST["password"]) &&
-        !empty($_POST["tel"]) && !empty($_POST["adresse"]) &&
-        !empty($_POST["role"])
-    ) {
-        // Create a User object from the submitted data
-        $user = new user(
-            null,
-            $_POST['nom'],
-            $_POST['nomFamille'],
-            $_POST['email'],
-            $_POST['password'],
-            $_POST['tel'],
-            $_POST['adresse'],
-            $_POST['role']
-        );
+    // Server-side validation
+    $exist = $userC->getByEmail($_POST["email"]);
+    $emailPattern = '/^[\w.%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/';
+    $namePattern = '/^[A-Za-z]+$/';
+    $rolePattern = '/^[0-2]$/'; // Role must be 0, 1, or 2
 
-        // Call the updateUser function
-        $usercontroller->updateUser($user, $_POST['id']);
-
-        // Redirect to the user list page
-        header('Location:userList.php');
+    if (!preg_match($emailPattern, $_POST["email"])) {
+        echo "<script>alert('Invalid email format. Please enter a valid email address.');</script>";
+    } elseif (!preg_match($namePattern, $_POST["nom"]) || !preg_match($namePattern, $_POST["nomFamille"])) {
+        echo "<script>alert('Invalid name format. Names should contain only letters.');</script>";
+    } elseif ($exist && $exist['id'] != $id) {
+        echo "<script>alert('Email is already in use.');</script>";
+    } elseif (!in_array($_POST["role"], ["0", "1", "2"])) {
+        echo "<script>alert('Invalid role selected. Please choose a valid role.');</script>";
+    }elseif (!preg_match($rolePattern, $_POST["role"])) {
+        echo "<script>alert('Invalid role selected. Role must be 0 (Client), 1 (Farmer), or 2 (Admin).');</script>";
     } else {
-        // Display an error message if information is missing
-        $error = "Missing information";
+        $valid = 1; // Form validation passed
     }
 }
+
+if ($valid == 1) {
+    // Form is valid, proceed with updating the user
+    $updatedRole = intval($_POST['role']); // Capture the selected role as integer
+
+    $user = new User(
+        null,
+        $_POST["nom"],
+        $_POST["nomFamille"],
+        $_POST["email"],
+        $_POST["password"],
+        $_POST["tel"], // Assuming the phone number remains unchanged
+        $_POST["adresse"], // Assuming the address remains unchanged
+        $updatedRole
+    );
+
+    $userC->updateUser($user, $id);
+    header('Location: userlist.php'); // Redirect to the user list page
+    exit;
+}
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -55,43 +73,42 @@ if (
 </head>
 
 <body>
-    <?php
-    // Check if the user ID is provided
-    if (isset($_POST['id'])) {
-        // Retrieve the user by ID
-        $user = $userController->getUserById($_POST['id']);
-    ?>
+    <?php if (!empty($error)): ?>
+        <p style="color: red;"><?php echo $error; ?></p>
+    <?php endif; ?>
+
+    <?php if ($user): ?>
         <!-- Fill the form with the user's data -->
-        <form id="user" action="" method="POST">
+        <form id="user" method="POST">
             <label for="id">User ID:</label>
-            <input class="form-control form-control-user" type="text" id="id" name="id" readonly value="<?php echo $_POST['id'] ?>"><br>
+            <input type="text" id="id" name="id" readonly value="<?php echo $user['id']; ?>"><br>
 
             <label for="nom">First Name:</label>
-            <input class="form-control form-control-user" type="text" id="nom" name="nom" value="<?php echo $user['nom'] ?>"><br>
+            <input type="text" id="nom" name="nom" value="<?php echo $user['nom']; ?>"><br>
 
             <label for="nomFamille">Last Name:</label>
-            <input class="form-control form-control-user" type="text" id="nomFamille" name="nomFamille" value="<?php echo $user['nomFamille'] ?>"><br>
+            <input type="text" id="nomFamille" name="nomFamille" value="<?php echo $user['nomFamille']; ?>"><br>
 
             <label for="email">Email:</label>
-            <input class="form-control form-control-user" type="email" id="email" name="email" value="<?php echo $user['email'] ?>"><br>
+            <input type="email" id="email" name="email" value="<?php echo $user['email']; ?>"><br>
 
             <label for="password">Password:</label>
-            <input class="form-control form-control-user" type="password" id="password" name="password" value="<?php echo $user['password'] ?>"><br>
+            <input type="password" id="password" name="password" value="<?php echo $user['password']; ?>"><br>
 
             <label for="tel">Phone:</label>
-            <input class="form-control form-control-user" type="text" id="tel" name="tel" value="<?php echo $user['tel'] ?>"><br>
+            <input type="text" id="tel" name="tel" value="<?php echo $user['tel']; ?>"><br>
 
             <label for="adresse">Address:</label>
-            <input class="form-control form-control-user" type="text" id="adresse" name="adresse" value="<?php echo $user['adresse'] ?>"><br>
+            <input type="text" id="adresse" name="adresse" value="<?php echo $user['adresse']; ?>"><br>
 
             <label for="role">Role:</label>
-            <input class="form-control form-control-user" type="text" id="role" name="role" value="<?php echo $user['role'] ?>"><br>
+            <input type="text" id="role" name="role" value="<?php echo $user['role']; ?>"><br>
 
             <input type="submit" value="Save">
         </form>
-    <?php
-    }
-    ?>
+    <?php else: ?>
+        <p style="color: red;">User not found.</p>
+    <?php endif; ?>
 </body>
 
 </html>

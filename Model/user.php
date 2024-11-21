@@ -1,21 +1,26 @@
 <?php
+
     class User {
         private $id;
         private $nom;
+        private $nomFamille;
         private $email;
         private $password;
-        private $address;
+        private $tel;
+        private $adresse;  
         private $role;
-        private $farm_name; // New field for Farmer
+        
     
-        public function __construct($id, $nom, $email, $password, $address, $role, $farm_name = null) {
+        public function __construct($id, $nom,$nomFamille, $email, $password,$tel, $adress, $role ) {
             $this->id = $id;
             $this->nom = $nom;
+            $this->nomFamille= $nomFamille;
             $this->email = $email;
             $this->password = $password;
-            $this->address = $address;
+            $this->tel= $tel;
+            $this->adresse = $adress;
             $this->role = $role;
-            $this->farm_name = $farm_name;
+            
         }
     
         
@@ -57,6 +62,24 @@
         }
 
         /**
+         * Get the value of nomFamille
+         */
+        public function getNomFamille()
+        {
+                return $this->nomFamille;
+        }
+
+        /**
+         * Set the value of nomFamille
+         */
+        public function setNomFamille($nomFamille): self
+        {
+                $this->nomFamille = $nomFamille;
+
+                return $this;
+        }
+
+        /**
          * Get the value of email
          */
         public function getEmail()
@@ -93,19 +116,37 @@
         }
 
         /**
-         * Get the value of address
+         * Get the value of tel
          */
-        public function getAddress()
+        public function getTel()
         {
-                return $this->address;
+                return $this->tel;
         }
 
         /**
-         * Set the value of address
+         * Set the value of tel
          */
-        public function setAddress($address): self
+        public function setTel($tel): self
         {
-                $this->address = $address;
+                $this->tel = $tel;
+
+                return $this;
+        }
+
+        /**
+         * Get the value of adresse
+         */
+        public function getAdresse()
+        {
+                return $this->adresse;
+        }
+
+        /**
+         * Set the value of adresse
+         */
+        public function setAdresse($adresse): self
+        {
+                $this->adresse = $adresse;
 
                 return $this;
         }
@@ -127,26 +168,5 @@
 
                 return $this;
         }
-
-        /**
-         * Get the value of farm_name
-         */
-        public function getFarmName()
-        {
-                return $this->farm_name;
-        }
-
-        /**
-         * Set the value of farm_name
-         */
-        public function setFarmName($farm_name): self
-        {
-                $this->farm_name = $farm_name;
-
-                return $this;
-        }
-    }
-
-   
-    
+}
 ?>

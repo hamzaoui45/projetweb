@@ -1,7 +1,7 @@
 <?php
 require "../config.php";
 
-class usercontroller
+class UserController
 {
     // Select all users
     public function userList()
@@ -10,24 +10,22 @@ class usercontroller
         $conn = config::getConnexion();
 
         try {
-            $list = $conn->query($sql);
-            return $list;
+            $liste = $conn->query($sql);
+            return $liste;
         } catch (Exception $e) {
             die('Error: ' . $e->getMessage());
         }
     }
 
-    // Select a single user by ID
+    // Select one user by id
     public function getUserById($id)
     {
         $sql = "SELECT * FROM user WHERE id = :id";
-        $conn = config::getConnexion();
-
+        $db = config::getConnexion();
         try {
-            $query = $conn->prepare($sql);
-            $query->bindValue(':id', $id, PDO::PARAM_INT);
+            $query = $db->prepare($sql);
+            $query->bindParam(':id', $id, PDO::PARAM_INT);
             $query->execute();
-
             $user = $query->fetch();
             return $user;
         } catch (Exception $e) {
@@ -36,33 +34,52 @@ class usercontroller
     }
 
     // Add a new user
-    public function addUser($user) {
-        $sql = "INSERT INTO user (nom, email, password, address, role, farm_name) 
-                VALUES (:nom, :email, :password, :address, :role, :farm_name)";
+    public function addUser($user)
+    {
+        // Check if the email already exists
+        $checkEmailSql = "SELECT COUNT(*) FROM user WHERE email = :email";
         $conn = config::getConnexion();
-    
+
         try {
+            // Check if the email already exists
+            $checkQuery = $conn->prepare($checkEmailSql);
+            $checkQuery->execute(['email' => $user->getEmail()]);
+            $emailCount = $checkQuery->fetchColumn();
+
+            if ($emailCount > 0) {
+                // If email exists, stop and show an error
+                echo "Error: This email is already registered.";
+                return;
+            }
+
+            // Prepare the SQL query to insert the new user
+            $sql = "INSERT INTO user (nom, nomFamille, email, password, tel, adresse, role) 
+                    VALUES (:nom, :nomFamille, :email, :password, :tel, :adresse, :role)";
+            
             $query = $conn->prepare($sql);
             $query->execute([
                 'nom' => $user->getNom(),
+                'nomFamille' => $user->getNomFamille(),
                 'email' => $user->getEmail(),
-                'password' => $user->getPassword(),
-                'address' => $user->getAddress(),
-                'role' => $user->getRole(),
-                'farm_name' => $user->getFarmName() // Insert farm_name if it's a Farmer
+                'password' => $user->getPassword(), // Password should be hashed when creating the user
+                'tel' => $user->getTel(),
+                'adresse' => $user->getAdresse(),
+                'role' => $user->getRole()
             ]);
-    
-            echo "User added successfully";
-        } catch (Exception $e) {
+
+            echo "User inserted successfully!";
+        } catch (PDOException $e) {
             die('Error: ' . $e->getMessage());
         }
     }
-    
 
     // Update an existing user
     public function updateUser($user, $id)
     {
-        $sql = "UPDATE user SET 
+        $db = config::getConnexion();
+
+        $query = $db->prepare(
+            'UPDATE user SET 
                 nom = :nom,
                 nomFamille = :nomFamille,
                 email = :email,
@@ -70,40 +87,55 @@ class usercontroller
                 tel = :tel,
                 adresse = :adresse,
                 role = :role
-            WHERE id = :id";
-        $conn = config::getConnexion();
+            WHERE id = :id'
+        );
 
         try {
-            $query = $conn->prepare($sql);
             $query->execute([
                 'id' => $id,
                 'nom' => $user->getNom(),
                 'nomFamille' => $user->getNomFamille(),
                 'email' => $user->getEmail(),
-                'password' => $user->getPassword(),
+                'password' => $user->getPassword(), // Ensure password is hashed before updating
                 'tel' => $user->getTel(),
                 'adresse' => $user->getAdresse(),
-                'role' => $user->getRole()
+                'role' => $user->getRole(),
+               
             ]);
 
-            echo $query->rowCount() . " record(s) updated successfully <br>";
+            echo $query->rowCount() . " records UPDATED successfully <br>";
         } catch (PDOException $e) {
             echo "Error: " . $e->getMessage();
         }
     }
 
-    // Delete a user by ID
+    // Delete one user by id
     public function deleteUser($id)
     {
         $sql = "DELETE FROM user WHERE id = :id";
         $conn = config::getConnexion();
-        $query = $conn->prepare($sql);
-
+        $req = $conn->prepare($sql);
+        $req->bindValue(':id', $id, PDO::PARAM_INT);
         try {
-            $query->bindValue(':id', $id, PDO::PARAM_INT);
-            $query->execute();
+            $req->execute();
+        } catch (Exception $e) {
+            die('Error: ' . $e->getMessage());
+        }
+    }
+    function getbyemail($email)
+    {
+        $sql = "SELECT * FROM user WHERE email = :email";
+        $db = config::getConnexion();
+        try {
+            $query = $db->prepare($sql);
+            $query->execute([
+                ':email' => $email
+            ]);
+            $user = $query->fetch();
+            return $user;
         } catch (Exception $e) {
             die('Error: ' . $e->getMessage());
         }
     }
 }
+?>
