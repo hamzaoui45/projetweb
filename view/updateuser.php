@@ -1,7 +1,7 @@
 <?php
 session_start();
 include '../Controller/usercontroller.php';
-include '../Model/User.php';
+include '../Model/user.php';
 
 $id = $_GET['id'];
 $error = "";
@@ -70,6 +70,101 @@ if ($valid == 1) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Update User</title>
+    <style>
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        form {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+        }
+
+        input[type="submit"] {
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        .error {
+            color: red;
+            font-size: 14px;
+        }
+    </style>
+    <script>
+        // JavaScript form validation
+        function validateForm(event) {
+            // Prevent the form from submitting if validation fails
+            event.preventDefault();
+
+            // Get form fields
+            const nom = document.getElementById("nom").value.trim();
+            const nomFamille = document.getElementById("nomFamille").value.trim();
+            const email = document.getElementById("email").value.trim();
+            const password = document.getElementById("password").value.trim();
+            const tel = document.getElementById("tel").value.trim();
+            const adresse = document.getElementById("adresse").value.trim();
+            const role = document.getElementById("role").value.trim();
+
+            // Check if any field is empty
+            if (!nom || !nomFamille || !email || !password || !tel || !adresse || role === "") {
+                alert("All fields are required. Please fill in all fields.");
+                return false;
+            }
+
+            // Validate email format
+            const emailPattern = /^[\w.%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            if (!emailPattern.test(email)) {
+                alert("Invalid email format. Please enter a valid email address.");
+                return false;
+            }
+
+            // Validate phone number (optional example: digits only)
+            const phonePattern = /^\d+$/;
+            if (!phonePattern.test(tel)) {
+                alert("Invalid phone number. Only digits are allowed.");
+                return false;
+            }
+
+            // Validate role
+            const validRoles = ["0", "1", "2"];
+            if (!validRoles.includes(role)) {
+                alert("Invalid role selected. Please choose a valid role.");
+                return false;
+            }
+
+            // If all validations pass, submit the form
+            document.getElementById("user").submit();
+        }
+    </script>
 </head>
 
 <body>
@@ -79,7 +174,7 @@ if ($valid == 1) {
 
     <?php if ($user): ?>
         <!-- Fill the form with the user's data -->
-        <form id="user" method="POST">
+        <form id="user" method="POST" onsubmit="validateForm(event)">
             <label for="id">User ID:</label>
             <input type="text" id="id" name="id" readonly value="<?php echo $user['id']; ?>"><br>
 
@@ -102,13 +197,13 @@ if ($valid == 1) {
             <input type="text" id="adresse" name="adresse" value="<?php echo $user['adresse']; ?>"><br>
 
             <div class="mb-3">
-            <label for="role" class="form-label">Role</label>
-            <select class="form-select" id="role" name="role" required>
-                <option value="0" <?= $user['role'] == 0 ? 'selected' : '' ?>>client</option>
-                <option value="1" <?= $user['role'] == 1 ? 'selected' : '' ?>>farmer</option>
-                <option value="2" <?= $user['role'] == 2 ? 'selected' : '' ?>>admin</option>
-            </select>
-        </div>
+                <label for="role" class="form-label">Role</label>
+                <select class="form-select" id="role" name="role" required>
+                    <option value="0" <?= $user['role'] == 0 ? 'selected' : '' ?>>Client</option>
+                    <option value="1" <?= $user['role'] == 1 ? 'selected' : '' ?>>Farmer</option>
+                    <option value="2" <?= $user['role'] == 2 ? 'selected' : '' ?>>Admin</option>
+                </select>
+            </div>
             <input type="submit" value="Save">
         </form>
     <?php else: ?>

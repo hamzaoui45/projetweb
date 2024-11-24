@@ -1,10 +1,3 @@
-<?php
-
-include "../Controller/usercontroller.php"; // Assume you have a UserController
-$userC = new usercontroller();
-$list = $userC->userList(); // Fetch the list of users
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -106,13 +99,21 @@ $list = $userC->userList(); // Fetch the list of users
             background-color: #e03e3e;
         }
 
-
-
     </style>
+    <script>
+        // Function to confirm deletion
+        function confirmDelete(userId) {
+            const confirmation = confirm('Are you sure you want to delete this user?');
+            if (confirmation) {
+                // Redirect to the delete script if confirmed
+                window.location.href = `deleteUser.php?id=${userId}`;
+            }
+        }
+    </script>
 </head>
 
 <body>
-    <a href="adduser.php">Add User</a> <!-- Link to add a new user -->
+    <a href="adduser.php" class="add-user-link">Add User</a> <!-- Link to add a new user -->
     <table border="1">
         <tr>
             <th>Id</th>
@@ -126,6 +127,10 @@ $list = $userC->userList(); // Fetch the list of users
             <th>Actions</th>
         </tr>
         <?php
+        include "../Controller/usercontroller.php"; // Assume you have a UserController
+        $userC = new usercontroller();
+        $list = $userC->userList(); // Fetch the list of users
+
         foreach ($list as $user) {
         ?>
             <tr>
@@ -139,11 +144,11 @@ $list = $userC->userList(); // Fetch the list of users
                 <td><?= $user['role']; ?></td>
                 <td>
                     <!-- Form to update user -->
-                    <form method="POST" action="updateuser.php?id=<?=$user['id']?> ">
-                        <input type="submit" name="update" value="Update">  
+                    <form method="POST" action="updateuser.php?id=<?= $user['id'] ?>">
+                        <input type="submit" name="update" value="Update" class="update-btn">  
                     </form>
-                    <!-- Link to delete user -->
-                    <a href="deleteUser.php?id=<?= $user['id']; ?>">Delete</a>
+                    <!-- Link to delete user with confirmation -->
+                    <a href="#" onclick="confirmDelete(<?= $user['id']; ?>)" class="delete-btn">Delete</a>
                 </td>
             </tr>
         <?php

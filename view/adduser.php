@@ -126,7 +126,7 @@ if (
         <input type="text" name="nomFamille" id="nomFamille" >
 
         <label for="email">Email:</label>
-        <input type="email" name="email" id="email" >
+        <input type="text" name="email" id="email" >
 
         <label for="password">Password:</label>
         <input type="password" name="password" id="password" >
@@ -146,6 +146,114 @@ if (
 
         <input type="submit" value="Save">
     </form>
+    <script>
+                document.addEventListener("DOMContentLoaded", function () {
+            const form = document.querySelector("form");
+
+            form.addEventListener("submit", function (event) {
+                event.preventDefault(); // Prevent default form submission
+
+                // Retrieve field values
+                const fields = {
+                    nom: document.getElementById("nom").value.trim(),
+                    nomFamille: document.getElementById("nomFamille").value.trim(),
+                    email: document.getElementById("email").value.trim(),
+                    password: document.getElementById("password").value.trim(),
+                    tel: document.getElementById("tel").value.trim(),
+                    adresse: document.getElementById("adresse").value.trim()
+                };
+
+                let isValid = true;
+
+                // Utility function to display error messages
+                function displayError(fieldId, message) {
+                    const field = document.getElementById(fieldId);
+                    let errorMessage = field.nextElementSibling;
+
+                    if (!errorMessage || !errorMessage.classList.contains('error-message')) {
+                        errorMessage = document.createElement("div");
+                        errorMessage.classList.add('error-message');
+                        field.parentNode.insertBefore(errorMessage, field.nextSibling);
+                    }
+
+                    errorMessage.textContent = message;
+                    errorMessage.style.display = "block";
+                }
+
+                // Utility function to hide error messages
+                function hideError(fieldId) {
+                    const field = document.getElementById(fieldId);
+                    const errorMessage = field.nextElementSibling;
+
+                    if (errorMessage && errorMessage.classList.contains('error-message')) {
+                        errorMessage.style.display = "none";
+                    }
+                }
+
+                // Validate 'nom' (3-20 characters)
+                if (fields.nom.length < 3 || fields.nom.length > 20) {
+                    isValid = false;
+                    displayError("nom", "Le nom doit contenir entre 3 et 20 caractères.");
+                } else {
+                    hideError("nom");
+                }
+
+                // Validate 'nomFamille' (3-20 characters)
+                if (fields.nomFamille.length < 3 || fields.nomFamille.length > 20) {
+                    isValid = false;
+                    displayError("nomFamille", "Le nom de famille doit contenir entre 3 et 20 caractères.");
+                } else {
+                    hideError("nomFamille");
+                }
+
+                // Validate 'email' (basic email pattern)
+                const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+                if (!emailPattern.test(fields.email)) {
+                    isValid = false;
+                    displayError("email", "Veuillez entrer une adresse email valide.");
+                } else {
+                    hideError("email");
+                }
+
+                // Validate 'password' (minimum 6 characters)
+                if (fields.password.length < 6) {
+                    isValid = false;
+                    displayError("password", "Le mot de passe doit contenir au moins 6 caractères.");
+                } else {
+                    hideError("password");
+                }
+
+                // Validate 'tel' (8 digits, starts with specific numbers)
+                const phonePattern = /^(2|3|4|5|7|9)[0-9]{7}$/;
+                if (!phonePattern.test(fields.tel)) {
+                    isValid = false;
+                    displayError("tel", "Le numéro doit contenir 8 chiffres et commencer par 2, 3, 4, 5, 7 ou 9.");
+                } else {
+                    hideError("tel");
+                }
+
+                // Validate 'adresse' (non-empty)
+                if (fields.adresse.length === 0) {
+                    isValid = false;
+                    displayError("adresse", "L'adresse ne peut pas être vide.");
+                } else {
+                    hideError("adresse");
+                }
+
+                // Final check and form submission
+                if (isValid) {
+                    alert("Formulaire soumis avec succès !");
+                    form.submit(); // Submit the form
+                } else {
+                    alert("Veuillez corriger les erreurs dans le formulaire.");
+                }
+            });
+        });
+
+
+
+        </script>
+    
 </body>
 
 </html>

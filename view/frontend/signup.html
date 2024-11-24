@@ -186,79 +186,69 @@
         <h1>Sign Up</h1>
         <p>Select your account type and fill out the form:</p>
         <div class="form-container">
+            
+
             <div class="form-switch">
                 <input type="radio" id="client" name="userType" value="client" onclick="toggleForm('clientForm')" />
                 <label for="client">Client</label>
                 <input type="radio" id="farmer" name="userType" value="farmer" onclick="toggleForm('farmerForm')" />
                 <label for="farmer">Farmer</label>
             </div>
-
-            <form method="POST" action="adduser.php">
-                <!-- Client Form -->
-                <div id="clientForm" class="hidden">
-                    <div class="form-header">
-                        <h2>Client Sign-Up</h2>
-                    </div>
-                    <label for="nom">Full Name</label>
-                    <input type="text" class="user" name="nom" placeholder="Enter your full name" required>
             
-                    <label for="nomFamille">nomFamille</label>
-                    <input type="text" class="user" name="nomFamille" placeholder="Enter your family name" required>
-                    
-                    <label for="email">Email Address</label>
-                    <input type="email" class="user" name="email" placeholder="Enter your email" required>
-                    
-                    <label for="password">Password</label>
-                    <input type="password" class="user" name="password" placeholder="Enter your password" required>
-                    
-                    <label for="tel">Telephone</label>
-                    <input type="text" class="user" name="tel" placeholder="Enter your phone number" required>
-                    
-                    <label for="adresse">Residential Address</label>
-                    <input type="text" class="user" name="adresse" placeholder="Enter your address" required>
-                    
-                    <label for="role">Role</label>
-                    <select name="role" class="user" required>
-                        <option value="client">Client</option>
-                        <option value="farmer">Farmer</option>
-                    </select>
-            
-                    <button type="submit" name="submit" value="client">Sign Up as Client</button>
+            <!-- Client Form -->
+            <form id="clientForm" method="POST" action="adduser.php" class="hidden">
+                <div class="form-header">
+                    <h2>Client Sign-Up</h2>
                 </div>
+                <input type="hidden" name="role" value="0" /> 
+                <label for="nom">Full Name</label>
+                <input type="text" id="client-nom" name="nom" placeholder="Enter your full name" />
+                
+                <label for="nomFamille">Family Name</label>
+                <input type="text" id="client-nomFamille" name="nomFamille" placeholder="Enter your family name"  />
+                
+                <label for="email">Email Address</label>
+                <input type="email" id="client-email" name="email" placeholder="Enter your email"  />
+                
+                <label for="password">Password</label>
+                <input type="password" id="client-password" name="password" placeholder="Enter your password" />
+                
+                <label for="tel">Telephone</label>
+                <input type="text" id="client-tel" name="tel" placeholder="Enter your phone number"  />
+                
+                <label for="adresse">Residential Address</label>
+                <input type="text" id="client-adresse" name="adresse" placeholder="Enter your address"  />
+                
+                <button type="submit" name="submit">Sign Up as Client</button>
             </form>
             
-            <form method="POST" action="adduser.php">
-                <!-- Farmer Form -->
-                <div id="farmerForm" class="hidden">
-                    <div class="form-header">
-                        <h2>Farmer Sign-Up</h2>
-                    </div>
-                    <label for="nom">Full Name</label>
-                    <input type="text" class="user" name="nom" placeholder="Enter your full name" required>
-            
-                    <label for="nomFamille">nomFamille</label>
-                    <input type="text" class="user" name="nomFamille" placeholder="Enter your family name" required>
-                    
-                    <label for="email">Email Address</label>
-                    <input type="email" class="user" name="email" placeholder="Enter your email" required>
-                    
-                    <label for="password">Password</label>
-                    <input type="password" class="user" name="password" placeholder="Enter your password" required>
-                    
-                    <label for="tel">Telephone</label>
-                    <input type="text" class="user" name="tel" placeholder="Enter your phone number" required>
-                    
-                    <label for="adresse">Farm Location</label>
-                    <input type="text" class="user" name="adresse" placeholder="Enter your farm location" required>
-                    
-                    <label for="role">Role</label>
-                    <select name="role" class="user" required>
-                        <option value="farmer">Farmer</option>
-                    </select>
-            
-                    <button type="submit" name="submit" value="farmer">Sign Up as Farmer</button>
+            <!-- Farmer Form -->
+            <form id="farmerForm" method="POST" action="adduser.php" class="hidden">
+                <div class="form-header">
+                    <h2>Farmer Sign-Up</h2>
                 </div>
+                <input type="hidden" name="role" value="1" /> <!-- Hidden field for role -->
+                <label for="nom">Full Name</label>
+                <input type="text" id="farmer-nom" name="nom" placeholder="Enter your full name" />
+                
+                <label for="nomFamille">Family Name</label>
+                <input type="text" id="farmer-nomFamille" name="nomFamille" placeholder="Enter your family name"/>
+                
+                <label for="email">Email Address</label>
+                <input type="email" id="farmer-email" name="email" placeholder="Enter your email" />
+                
+                <label for="password">Password</label>
+                <input type="password" id="farmer-password" name="password" placeholder="Enter your password"  />
+                
+                <label for="tel">Telephone</label>
+                <input type="text" id="farmer-tel" name="tel" placeholder="Enter your phone number" />
+                
+                <label for="adresse">Farm Location</label>
+                <input type="text" id="farmer-adresse" name="adresse" placeholder="Enter your farm location"  />
+                
+                <button type="submit" name="submit">Sign Up as Farmer</button>
             </form>
+            
             
         </div>
     </main>
@@ -268,132 +258,137 @@
     </footer>
 
     <script>
-        // Toggles between Client and Farmer forms
-        function toggleForm(formId) {
-            document.getElementById('clientForm').classList.add('hidden');
-            document.getElementById('farmerForm').classList.add('hidden');
-            document.getElementById(formId).classList.remove('hidden');
-        }
-    
-        // Validates the Client form
-        function validateClientForm() {
-            const nom = document.querySelector('#clientForm input[name="nom"]').value.trim();
-            const nomFamille = document.querySelector('#clientForm input[name="nomFamille"]').value.trim();
-            const email = document.querySelector('#clientForm input[name="email"]').value.trim();
-            const password = document.querySelector('#clientForm input[name="password"]').value.trim();
-            const tel = document.querySelector('#clientForm input[name="tel"]').value.trim();
-            const adresse = document.querySelector('#clientForm input[name="adresse"]').value.trim();
-    
-            if (!validateName(nom)) {
-                alert("Full Name must contain only letters and spaces.");
-                return false;
-            }
-            if (!validateName(nomFamille)) {
-                alert("Family Name must contain only letters and spaces.");
-                return false;
-            }
-            if (!validateEmail(email)) {
-                alert("Invalid email format.");
-                return false;
-            }
-            if (!validatePassword(password)) {
-                alert("Password must be at least 8 characters long.");
-                return false;
-            }
-            if (!validatePhone(tel)) {
-                alert("Invalid phone number format.");
-                return false;
-            }
-            if (adresse.length < 5) {
-                alert("Address must be at least 5 characters long.");
-                return false;
-            }
-    
-            alert("Client sign-up successful!");
-            return true;
-        }
-    
-        // Validates the Farmer form
-        function validateFarmerForm() {
-            const nom = document.querySelector('#farmerForm input[name="nom"]').value.trim();
-            const nomFamille = document.querySelector('#farmerForm input[name="nomFamille"]').value.trim();
-            const email = document.querySelector('#farmerForm input[name="email"]').value.trim();
-            const password = document.querySelector('#farmerForm input[name="password"]').value.trim();
-            const tel = document.querySelector('#farmerForm input[name="tel"]').value.trim();
-            const adresse = document.querySelector('#farmerForm input[name="adresse"]').value.trim();
-    
-            if (!validateName(nom)) {
-                alert("Full Name must contain only letters and spaces.");
-                return false;
-            }
-            if (!validateName(nomFamille)) {
-                alert("Family Name must contain only letters and spaces.");
-                return false;
-            }
-            if (!validateEmail(email)) {
-                alert("Invalid email format.");
-                return false;
-            }
-            if (!validatePassword(password)) {
-                alert("Password must be at least 8 characters long.");
-                return false;
-            }
-            if (!validatePhone(tel)) {
-                alert("Invalid phone number format.");
-                return false;
-            }
-            if (adresse.length < 5) {
-                alert("Farm Location must be at least 5 characters long.");
-                return false;
-            }
-    
-            alert("Farmer sign-up successful!");
-            return true;
-        }
-    
-        // Helper: Validates name fields
-        function validateName(name) {
-            const namePattern = /^[a-zA-ZÀ-ÿ\s]+$/;
-            return namePattern.test(name);
-        }
-    
-        // Helper: Validates email format
-        function validateEmail(email) {
-            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            return emailPattern.test(email);
-        }
-    
-        // Helper: Validates password length
-        function validatePassword(password) {
-            return password.length >= 8;
-        }
-    
-        // Helper: Validates phone numbers
-        function validatePhone(phone) {
-            const phonePattern = /^\+?[0-9\s\-]+$/;
-            return phonePattern.test(phone);
-        }
-    
-        document.querySelectorAll('form').forEach((form) => {
-            form.addEventListener('submit', function (e) {
-            let valid = false;
-        
-            if (form.contains(document.querySelector('#clientForm'))) {
-                valid = validateClientForm();
-        }     else if (form.contains(document.querySelector('#farmerForm'))) {
-                 valid = validateFarmerForm();
-             }
-        
-            if (valid) {
-                alert("Sign-up successful! Redirecting to home page...");
-                window.location.href = "redirectindex.html"; 
-        } else {
-            e.preventDefault(); // Prevent form submission
-        }
-    });
-});
+            document.addEventListener("DOMContentLoaded", function () {
+                const clientRadio = document.getElementById("client");
+                const farmerRadio = document.getElementById("farmer");
+                const clientForm = document.getElementById("clientForm");
+                const farmerForm = document.getElementById("farmerForm");
 
-    </script>
-    
+                // Function to handle toggling between forms
+                function toggleForms() {
+                    if (clientRadio.checked) {
+                        clientForm.classList.remove("hidden");
+                        farmerForm.classList.add("hidden");
+                    } else if (farmerRadio.checked) {
+                        farmerForm.classList.remove("hidden");
+                        clientForm.classList.add("hidden");
+                    }
+                }
+
+                // Add event listeners to radio buttons
+                clientRadio.addEventListener("change", toggleForms);
+                farmerRadio.addEventListener("change", toggleForms);
+
+                // Optional: Default selection for the form
+                toggleForms();
+            });
+        
+                document.addEventListener("DOMContentLoaded", function () {
+            const form = document.querySelector("form");
+
+            form.addEventListener("submit", function (event) {
+                event.preventDefault(); // Prevent default form submission
+
+                // Retrieve field values
+                const fields = {
+                    nom: document.getElementById("nom").value.trim(),
+                    nomFamille: document.getElementById("nomFamille").value.trim(),
+                    email: document.getElementById("email").value.trim(),
+                    password: document.getElementById("password").value.trim(),
+                    tel: document.getElementById("tel").value.trim(),
+                    adresse: document.getElementById("adresse").value.trim()
+                };
+
+                let isValid = true;
+
+                // Utility function to display error messages
+                function displayError(fieldId, message) {
+                    const field = document.getElementById(fieldId);
+                    let errorMessage = field.nextElementSibling;
+
+                    if (!errorMessage || !errorMessage.classList.contains('error-message')) {
+                        errorMessage = document.createElement("div");
+                        errorMessage.classList.add('error-message');
+                        field.parentNode.insertBefore(errorMessage, field.nextSibling);
+                    }
+
+                    errorMessage.textContent = message;
+                    errorMessage.style.display = "block";
+                }
+
+                // Utility function to hide error messages
+                function hideError(fieldId) {
+                    const field = document.getElementById(fieldId);
+                    const errorMessage = field.nextElementSibling;
+
+                    if (errorMessage && errorMessage.classList.contains('error-message')) {
+                        errorMessage.style.display = "none";
+                    }
+                }
+
+                // Validate 'nom' (3-20 characters)
+                if (fields.nom.length < 3 || fields.nom.length > 20) {
+                    isValid = false;
+                    displayError("nom", "Le nom doit contenir entre 3 et 20 caractères.");
+                } else {
+                    hideError("nom");
+                }
+
+                // Validate 'nomFamille' (3-20 characters)
+                if (fields.nomFamille.length < 3 || fields.nomFamille.length > 20) {
+                    isValid = false;
+                    displayError("nomFamille", "Le nom de famille doit contenir entre 3 et 20 caractères.");
+                } else {
+                    hideError("nomFamille");
+                }
+
+                // Validate 'email' (basic email pattern)
+                const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+                if (!emailPattern.test(fields.email)) {
+                    isValid = false;
+                    displayError("email", "Veuillez entrer une adresse email valide.");
+                } else {
+                    hideError("email");
+                }
+
+                // Validate 'password' (minimum 6 characters)
+                if (fields.password.length < 6) {
+                    isValid = false;
+                    displayError("password", "Le mot de passe doit contenir au moins 6 caractères.");
+                } else {
+                    hideError("password");
+                }
+
+                // Validate 'tel' (8 digits, starts with specific numbers)
+                const phonePattern = /^(2|3|4|5|7|9)[0-9]{7}$/;
+                if (!phonePattern.test(fields.tel)) {
+                    isValid = false;
+                    displayError("tel", "Le numéro doit contenir 8 chiffres et commencer par 2, 3, 4, 5, 7 ou 9.");
+                } else {
+                    hideError("tel");
+                }
+
+                // Validate 'adresse' (non-empty)
+                if (fields.adresse.length === 0) {
+                    isValid = false;
+                    displayError("adresse", "L'adresse ne peut pas être vide.");
+                } else {
+                    hideError("adresse");
+                }
+
+                // Final check and form submission
+                if (isValid) {
+                    alert("Formulaire soumis avec succès !");
+                    form.submit(); // Submit the form
+                } else {
+                    alert("Veuillez corriger les erreurs dans le formulaire.");
+                }
+            });
+        });
+
+
+
+</script>
+
 </body>
 </html>
