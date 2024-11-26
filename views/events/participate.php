@@ -59,8 +59,7 @@
         <div class="card">
             <h3><?= htmlspecialchars($event['titre']); ?></h3>
             <p><strong>Date :</strong> <?= htmlspecialchars($event['date']); ?></p>
-            <p><strong>Longitude :</strong> <?= htmlspecialchars($event['longi']); ?></p>
-            <p><strong>Latitude :</strong> <?= htmlspecialchars($event['lat']); ?></p>
+           
             <form action="index.php?action=join_event" method="POST">
                 <input type="hidden" name="event_id" value="<?= $event['id']; ?>">
                 <button type="submit" class="button">Participer</button>
