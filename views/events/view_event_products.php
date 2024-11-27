@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Produits de l'événement</title>
+    <img src="app/views/events/bbb.png">
     <style>
         body {
             font-family: Arial, sans-serif;

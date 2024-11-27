@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Liste des événements</title>
     <link rel="stylesheet" href="style.css3">
+    <img src="app/views/events/bbb.png">
     <style>
         /* Styles CSS pour la présentation de la page */
         table {
