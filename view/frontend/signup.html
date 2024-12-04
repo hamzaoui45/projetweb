@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Up - AgriPlate</title>
-    <link rel="stylesheet" href="styles.css">
     <style>
         /* General Styles */
         body {
@@ -64,11 +63,6 @@
             margin-bottom: 10px;
         }
 
-        p {
-            font-size: 1.1em;
-            color: #555;
-        }
-
         .form-container {
             max-width: 500px;
             margin: 20px auto;
@@ -76,55 +70,6 @@
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .form-header {
-            margin-bottom: 20px;
-            text-align: left;
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        .form-container label {
-            display: block;
-            margin: 10px 0 5px;
-            color: #333;
-            font-weight: bold;
-        }
-
-        .form-container input,
-        .form-container select {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 15px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 1em;
-            box-sizing: border-box;
-            transition: border-color 0.3s ease;
-        }
-
-        .form-container input:focus {
-            border-color: #4CAF50;
-            outline: none;
-        }
-
-        .form-container button {
-            width: 100%;
-            padding: 12px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1em;
-            transition: background-color 0.3s ease;
-        }
-
-        .form-container button:hover {
-            background-color: #45a049;
         }
 
         .form-switch {
@@ -144,7 +89,6 @@
             border-radius: 5px;
             background: #ddd;
             cursor: pointer;
-            transition: background 0.3s ease, color 0.3s ease;
         }
 
         .form-switch input[type="radio"]:checked + label {
@@ -152,12 +96,30 @@
             color: white;
         }
 
-        footer {
+        .form-container label {
+            display: block;
+            margin: 10px 0 5px;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .form-container input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .form-container button {
+            width: 100%;
+            padding: 12px;
             background-color: #4CAF50;
             color: white;
-            padding: 20px;
-            text-align: center;
+            border: none;
+            border-radius: 5px;
         }
+
         .error-message {
             color: red;
             font-size: 0.9em;
@@ -168,13 +130,20 @@
         .hidden {
             display: none;
         }
+
+        footer {
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
     <header>
         <div class="header-container">
             <div class="logo">
-                <img src="c:/Users/hamza/Downloads/462562198_1103487334732019_7215644507738509228_n.png" alt="AgriPlate Logo">
+                <img src="logo.png" alt="AgriPlate Logo">
             </div>
             <div class="auth-buttons">
                 <a href="index.html">Home</a>
@@ -186,70 +155,48 @@
         <h1>Sign Up</h1>
         <p>Select your account type and fill out the form:</p>
         <div class="form-container">
-            
-
             <div class="form-switch">
                 <input type="radio" id="client" name="userType" value="client" onclick="toggleForm('clientForm')" />
                 <label for="client">Client</label>
                 <input type="radio" id="farmer" name="userType" value="farmer" onclick="toggleForm('farmerForm')" />
                 <label for="farmer">Farmer</label>
             </div>
-            
+
             <!-- Client Form -->
             <form id="clientForm" method="POST" action="adduser.php" class="hidden">
-                <div class="form-header">
-                    <h2>Client Sign-Up</h2>
-                </div>
-                <input type="hidden" name="role" value="0" /> 
-                <label for="nom">Full Name</label>
+                <input type="hidden" name="role" value="0" />
+                <label for="client-nom">Full Name</label>
                 <input type="text" id="client-nom" name="nom" placeholder="Enter your full name" />
-                
-                <label for="nomFamille">Family Name</label>
-                <input type="text" id="client-nomFamille" name="nomFamille" placeholder="Enter your family name"  />
-                
-                <label for="email">Email Address</label>
-                <input type="email" id="client-email" name="email" placeholder="Enter your email"  />
-                
-                <label for="password">Password</label>
+                <label for="client-nomFamille">Family Name</label>
+                <input type="text" id="client-nomFamille" name="nomFamille" placeholder="Enter your family name" />
+                <label for="client-email">Email Address</label>
+                <input type="email" id="client-email" name="email" placeholder="Enter your email" />
+                <label for="client-password">Password</label>
                 <input type="password" id="client-password" name="password" placeholder="Enter your password" />
-                
-                <label for="tel">Telephone</label>
-                <input type="text" id="client-tel" name="tel" placeholder="Enter your phone number"  />
-                
-                <label for="adresse">Residential Address</label>
-                <input type="text" id="client-adresse" name="adresse" placeholder="Enter your address"  />
-                
-                <button type="submit" name="submit">Sign Up as Client</button>
+                <label for="client-tel">Telephone</label>
+                <input type="tel" id="client-tel" name="tel" placeholder="Enter your phone number" />
+                <label for="client-adresse">Residential Address</label>
+                <input type="text" id="client-adresse" name="adresse" placeholder="Enter your address" />
+                <button type="submit">Sign Up as Client</button>
             </form>
-            
+
             <!-- Farmer Form -->
             <form id="farmerForm" method="POST" action="adduser.php" class="hidden">
-                <div class="form-header">
-                    <h2>Farmer Sign-Up</h2>
-                </div>
-                <input type="hidden" name="role" value="1" /> <!-- Hidden field for role -->
-                <label for="nom">Full Name</label>
+                <input type="hidden" name="role" value="1" />
+                <label for="farmer-nom">Full Name</label>
                 <input type="text" id="farmer-nom" name="nom" placeholder="Enter your full name" />
-                
-                <label for="nomFamille">Family Name</label>
-                <input type="text" id="farmer-nomFamille" name="nomFamille" placeholder="Enter your family name"/>
-                
-                <label for="email">Email Address</label>
+                <label for="farmer-nomFamille">Family Name</label>
+                <input type="text" id="farmer-nomFamille" name="nomFamille" placeholder="Enter your family name" />
+                <label for="farmer-email">Email Address</label>
                 <input type="email" id="farmer-email" name="email" placeholder="Enter your email" />
-                
-                <label for="password">Password</label>
-                <input type="password" id="farmer-password" name="password" placeholder="Enter your password"  />
-                
-                <label for="tel">Telephone</label>
-                <input type="text" id="farmer-tel" name="tel" placeholder="Enter your phone number" />
-                
-                <label for="adresse">Farm Location</label>
-                <input type="text" id="farmer-adresse" name="adresse" placeholder="Enter your farm location"  />
-                
-                <button type="submit" name="submit">Sign Up as Farmer</button>
+                <label for="farmer-password">Password</label>
+                <input type="password" id="farmer-password" name="password" placeholder="Enter your password" />
+                <label for="farmer-tel">Telephone</label>
+                <input type="tel" id="farmer-tel" name="tel" placeholder="Enter your phone number" />
+                <label for="farmer-adresse">Farm Location</label>
+                <input type="text" id="farmer-adresse" name="adresse" placeholder="Enter your farm location" />
+                <button type="submit">Sign Up as Farmer</button>
             </form>
-            
-            
         </div>
     </main>
 
@@ -258,137 +205,19 @@
     </footer>
 
     <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                const clientRadio = document.getElementById("client");
-                const farmerRadio = document.getElementById("farmer");
-                const clientForm = document.getElementById("clientForm");
-                const farmerForm = document.getElementById("farmerForm");
+        function toggleForm(formId) {
+            document.getElementById("clientForm").classList.add("hidden");
+            document.getElementById("farmerForm").classList.add("hidden");
+            document.getElementById(formId).classList.remove("hidden");
+        }
+        function toggleForms() {
+                clientForm.classList.toggle("hidden", !clientRadio.checked);
+                farmerForm.classList.toggle("hidden", !farmerRadio.checked);
+            }
 
-                // Function to handle toggling between forms
-                function toggleForms() {
-                    if (clientRadio.checked) {
-                        clientForm.classList.remove("hidden");
-                        farmerForm.classList.add("hidden");
-                    } else if (farmerRadio.checked) {
-                        farmerForm.classList.remove("hidden");
-                        clientForm.classList.add("hidden");
-                    }
-                }
-
-                // Add event listeners to radio buttons
-                clientRadio.addEventListener("change", toggleForms);
-                farmerRadio.addEventListener("change", toggleForms);
-
-                // Optional: Default selection for the form
-                toggleForms();
-            });
-        
-                document.addEventListener("DOMContentLoaded", function () {
-            const form = document.querySelector("form");
-
-            form.addEventListener("submit", function (event) {
-                event.preventDefault(); // Prevent default form submission
-
-                // Retrieve field values
-                const fields = {
-                    nom: document.getElementById("nom").value.trim(),
-                    nomFamille: document.getElementById("nomFamille").value.trim(),
-                    email: document.getElementById("email").value.trim(),
-                    password: document.getElementById("password").value.trim(),
-                    tel: document.getElementById("tel").value.trim(),
-                    adresse: document.getElementById("adresse").value.trim()
-                };
-
-                let isValid = true;
-
-                // Utility function to display error messages
-                function displayError(fieldId, message) {
-                    const field = document.getElementById(fieldId);
-                    let errorMessage = field.nextElementSibling;
-
-                    if (!errorMessage || !errorMessage.classList.contains('error-message')) {
-                        errorMessage = document.createElement("div");
-                        errorMessage.classList.add('error-message');
-                        field.parentNode.insertBefore(errorMessage, field.nextSibling);
-                    }
-
-                    errorMessage.textContent = message;
-                    errorMessage.style.display = "block";
-                }
-
-                // Utility function to hide error messages
-                function hideError(fieldId) {
-                    const field = document.getElementById(fieldId);
-                    const errorMessage = field.nextElementSibling;
-
-                    if (errorMessage && errorMessage.classList.contains('error-message')) {
-                        errorMessage.style.display = "none";
-                    }
-                }
-
-                // Validate 'nom' (3-20 characters)
-                if (fields.nom.length < 3 || fields.nom.length > 20) {
-                    isValid = false;
-                    displayError("nom", "Le nom doit contenir entre 3 et 20 caractères.");
-                } else {
-                    hideError("nom");
-                }
-
-                // Validate 'nomFamille' (3-20 characters)
-                if (fields.nomFamille.length < 3 || fields.nomFamille.length > 20) {
-                    isValid = false;
-                    displayError("nomFamille", "Le nom de famille doit contenir entre 3 et 20 caractères.");
-                } else {
-                    hideError("nomFamille");
-                }
-
-                // Validate 'email' (basic email pattern)
-                const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-                if (!emailPattern.test(fields.email)) {
-                    isValid = false;
-                    displayError("email", "Veuillez entrer une adresse email valide.");
-                } else {
-                    hideError("email");
-                }
-
-                // Validate 'password' (minimum 6 characters)
-                if (fields.password.length < 6) {
-                    isValid = false;
-                    displayError("password", "Le mot de passe doit contenir au moins 6 caractères.");
-                } else {
-                    hideError("password");
-                }
-
-                // Validate 'tel' (8 digits, starts with specific numbers)
-                const phonePattern = /^(2|3|4|5|7|9)[0-9]{7}$/;
-                if (!phonePattern.test(fields.tel)) {
-                    isValid = false;
-                    displayError("tel", "Le numéro doit contenir 8 chiffres et commencer par 2, 3, 4, 5, 7 ou 9.");
-                } else {
-                    hideError("tel");
-                }
-
-                // Validate 'adresse' (non-empty)
-                if (fields.adresse.length === 0) {
-                    isValid = false;
-                    displayError("adresse", "L'adresse ne peut pas être vide.");
-                } else {
-                    hideError("adresse");
-                }
-
-                // Final check and form submission
-                if (isValid) {
-                    alert("Formulaire soumis avec succès !");
-                    form.submit(); // Submit the form
-                } else {
-                    alert("Veuillez corriger les erreurs dans le formulaire.");
-                }
-            });
-        });
-
-
-
-</script>
-
+            clientRadio.addEventListener("change", toggleForms);
+            farmerRadio.addEventListener("change", toggleForms);
+            toggleForms();
+    </script>
 </body>
 </html>

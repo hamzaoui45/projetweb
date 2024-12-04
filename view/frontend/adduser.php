@@ -1,7 +1,7 @@
 <?php
 // Include necessary files
-include "../Model/user.php";
-include "../Controller/usercontroller.php";
+include "../../Model/user.php";
+include "../../Controller/usercontroller.php";
 
 // Process form submission
 if (
@@ -14,13 +14,17 @@ if (
         !empty($_POST["password"]) && !empty($_POST["tel"]) && !empty($_POST["adresse"]) &&
         ($_POST["role"] === "0" || $_POST["role"] === "1" || $_POST["role"] === "2")
     ) {
+        // Hash the password securely
+        $hashedPassword = password_hash($_POST["password"], PASSWORD_DEFAULT);
+        // Save $hashedPassword to the database.
+        
         // Create a new user object
         $user = new User(
             null,
             $_POST["nom"],
             $_POST["nomFamille"],
             $_POST["email"],
-            $_POST["password"], // Consider hashing passwords
+            $hashedPassword, // Save the hashed password
             $_POST["tel"],
             $_POST["adresse"],
             $_POST["role"]
@@ -29,13 +33,15 @@ if (
         // Add user to the database
         $userC = new UserController();
         $userC->addUser($user);
+
         // Redirect to a user list or success page
-        header('Location:userList.php');
-            exit;
+        header('Location:redirectindex.php');
+        exit;
     } else {
         $error = "All fields are required, and role must be valid.";
     }
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -121,12 +127,15 @@ if (
     <form method="post" action="">
         <label for="nom">First Name:</label>
         <input type="text" name="nom" id="nom" >
+        <span id="nomerror"></span>
 
         <label for="nomFamille">Last Name:</label>
         <input type="text" name="nomFamille" id="nomFamille" >
+        <span id="nomFamilleerror"></span>
 
         <label for="email">Email:</label>
         <input type="text" name="email" id="email" >
+        <span id="email"></span>
 
         <label for="password">Password:</label>
         <input type="password" name="password" id="password" >
@@ -160,7 +169,9 @@ if (
                     email: document.getElementById("email").value.trim(),
                     password: document.getElementById("password").value.trim(),
                     tel: document.getElementById("tel").value.trim(),
-                    adresse: document.getElementById("adresse").value.trim()
+                    adresse: document.getElementById("adresse").value.trim(),
+                    errornom:document.getElementById("nomerror"),
+                    nomFamilleerror:document.getElementById("nomFamilleerror"),
                 };
 
                 let isValid = true;
@@ -193,7 +204,8 @@ if (
                 // Validate 'nom' (3-20 characters)
                 if (fields.nom.length < 3 || fields.nom.length > 20) {
                     isValid = false;
-                    displayError("nom", "Le nom doit contenir entre 3 et 20 caractères.");
+                    fields.errornom.innerHTML="nom", "Le nom doit contenir entre 3 et 20 caractères.";
+                    // displayError("nom", "Le nom doit contenir entre 3 et 20 caractères.");
                 } else {
                     hideError("nom");
                 }
@@ -201,7 +213,8 @@ if (
                 // Validate 'nomFamille' (3-20 characters)
                 if (fields.nomFamille.length < 3 || fields.nomFamille.length > 20) {
                     isValid = false;
-                    displayError("nomFamille", "Le nom de famille doit contenir entre 3 et 20 caractères.");
+                    fields.nomFamilleerror.innerHTML="nomFamille", "Le nom de famille doit contenir entre 3 et 20 caractères.";
+                    //displayError("nomFamille", "Le nom de famille doit contenir entre 3 et 20 caractères.");
                 } else {
                     hideError("nomFamille");
                 }

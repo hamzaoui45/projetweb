@@ -64,14 +64,15 @@
         }
 
         form {
-            display: inline-block;
-            text-align: left;
-            margin-top: 20px;
+            width: 80%; 
+            max-width: 300px; 
+            padding: 20px; 
+            margin: 0 auto; /* Center the form horizontally */
             background-color: white;
-            padding: 20px;
             border-radius: 8px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
+
 
         label {
             font-size: 1em;
@@ -109,13 +110,30 @@
             padding: 20px;
             text-align: center;
         }
+        /* Style for the forgot password link */
+        .link {
+            text-align: left;
+            margin-bottom: 10px;
+        }
+
+        .link a {
+            color: #4CAF50;
+            text-decoration: none;
+            font-size: 0.9em;
+        }
+
+        .link a:hover {
+            text-decoration: underline;
+        }
+       
+
     </style>
 </head>
 <body>
     <header>
         <div class="header-container">
             <div class="logo">
-                <img src="c:/Users/hamza/Downloads/462562198_1103487334732019_7215644507738509228_n.png" alt="AgriPlate Logo">
+                <img src="462562198_1103487334732019_7215644507738509228_n (1) copy.png" alt="AgriPlate Logo">
             </div>
         </div>
     </header>
@@ -124,13 +142,18 @@
         <h1>Login</h1>
         <form action="login.php" method="POST" onsubmit="return validateLoginForm()">
             <label for="email">Email</label>
-            <input type="text" id="email" name="email" >
-
+            <input type="text" id="email" name="email">
+        
             <label for="password">Password</label>
-            <input type="password" id="password" name="password" >
-
+            <input type="password" id="password" name="password">
+        
+            <div class="link forget-pass text-left">
+                <a href="forgot-password.php">Forgot password?</a>
+            </div>
+        
             <button type="submit">Login</button>
         </form>
+        
     </main>
 
     <footer>

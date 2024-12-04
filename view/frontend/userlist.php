@@ -127,7 +127,7 @@
             <th>Actions</th>
         </tr>
         <?php
-        include "../Controller/usercontroller.php"; // Assume you have a UserController
+        include "../../Controller/usercontroller.php"; // Assume you have a UserController
         $userC = new usercontroller();
         $list = $userC->userList(); // Fetch the list of users
 

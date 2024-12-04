@@ -1,5 +1,5 @@
 <?php
-include '../Controller/usercontroller.php';
+include '../../Controller/usercontroller.php';
 $UserC = new usercontroller();
 
 // Retrieve the ID passed in the URL using $_GET["id"]

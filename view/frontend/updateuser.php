@@ -1,11 +1,9 @@
 <?php
 session_start();
-include '../Controller/usercontroller.php';
-include '../Model/user.php';
-
+include '../../Controller/usercontroller.php';
+include '../../Model/user.php';
 $id = $_GET['id'];
 $error = "";
-
 // Create an instance of the controller
 $userC = new UserController();
 $user = $userC->getUserById($id); // Fetch the user details
@@ -26,15 +24,19 @@ if (
     $namePattern = '/^[A-Za-z]+$/';
     $rolePattern = '/^[0-2]$/'; // Role must be 0, 1, or 2
 
-    if (!preg_match($emailPattern, $_POST["email"])) {
+    if (!preg_match($namePattern, $_POST["nom"])) {
+        echo "<script>alert('Invalid first name format. Names should contain only letters.');</script>";
+    } elseif (!preg_match($namePattern, $_POST["nomFamille"])) {
+        echo "<script>alert('Invalid last name format. Names should contain only letters.');</script>";
+    } elseif (!preg_match($emailPattern, $_POST["email"])) {
         echo "<script>alert('Invalid email format. Please enter a valid email address.');</script>";
-    } elseif (!preg_match($namePattern, $_POST["nom"]) || !preg_match($namePattern, $_POST["nomFamille"])) {
-        echo "<script>alert('Invalid name format. Names should contain only letters.');</script>";
+    } elseif (strlen($_POST["password"]) < 6) {
+        echo "<script>alert('Password must be at least 6 characters long.');</script>";
+    } elseif (!preg_match('/^\d{8,15}$/', $_POST["tel"])) { // Assuming 8-15 digit phone numbers
+        echo "<script>alert('Invalid phone number. Only digits are allowed, and it must be between 8 and 15 characters long.');</script>";
     } elseif ($exist && $exist['id'] != $id) {
         echo "<script>alert('Email is already in use.');</script>";
-    } elseif (!in_array($_POST["role"], ["0", "1", "2"])) {
-        echo "<script>alert('Invalid role selected. Please choose a valid role.');</script>";
-    }elseif (!preg_match($rolePattern, $_POST["role"])) {
+    } elseif (!preg_match($rolePattern, $_POST["role"])) {
         echo "<script>alert('Invalid role selected. Role must be 0 (Client), 1 (Farmer), or 2 (Admin).');</script>";
     } else {
         $valid = 1; // Form validation passed
@@ -43,6 +45,13 @@ if (
 
 if ($valid == 1) {
     // Form is valid, proceed with updating the user
+
+    // Check if the password has changed; if yes, hash it
+    $password = $_POST["password"];
+    if (!password_verify($password, $user['password'])) { // Avoid rehashing the existing hashed password
+        $password = password_hash($password, PASSWORD_DEFAULT);
+    }
+
     $updatedRole = intval($_POST['role']); // Capture the selected role as integer
 
     $user = new User(
@@ -50,7 +59,7 @@ if ($valid == 1) {
         $_POST["nom"],
         $_POST["nomFamille"],
         $_POST["email"],
-        $_POST["password"],
+        $password, // Store the hashed password
         $_POST["tel"], // Assuming the phone number remains unchanged
         $_POST["adresse"], // Assuming the address remains unchanged
         $updatedRole
@@ -61,7 +70,6 @@ if ($valid == 1) {
     exit;
 }
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -122,48 +130,53 @@ if ($valid == 1) {
     <script>
         // JavaScript form validation
         function validateForm(event) {
-            // Prevent the form from submitting if validation fails
             event.preventDefault();
 
-            // Get form fields
             const nom = document.getElementById("nom").value.trim();
             const nomFamille = document.getElementById("nomFamille").value.trim();
             const email = document.getElementById("email").value.trim();
             const password = document.getElementById("password").value.trim();
             const tel = document.getElementById("tel").value.trim();
-            const adresse = document.getElementById("adresse").value.trim();
             const role = document.getElementById("role").value.trim();
 
-            // Check if any field is empty
-            if (!nom || !nomFamille || !email || !password || !tel || !adresse || role === "") {
-                alert("All fields are required. Please fill in all fields.");
+            const emailPattern = /^[\w.%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            const namePattern = /^[A-Za-z]+$/;
+            const phonePattern = /^\d{8,15}$/; // Adjust for your phone number requirements
+            const validRoles = ["0", "1", "2"];
+
+            if (!namePattern.test(nom)) {
+                alert("Invalid first name format. Names should contain only letters.");
                 return false;
             }
 
-            // Validate email format
-            const emailPattern = /^[\w.%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            if (!namePattern.test(nomFamille)) {
+                alert("Invalid last name format. Names should contain only letters.");
+                return false;
+            }
+
             if (!emailPattern.test(email)) {
                 alert("Invalid email format. Please enter a valid email address.");
                 return false;
             }
 
-            // Validate phone number (optional example: digits only)
-            const phonePattern = /^\d+$/;
-            if (!phonePattern.test(tel)) {
-                alert("Invalid phone number. Only digits are allowed.");
+            if (password.length < 6) {
+                alert("Password must be at least 6 characters long.");
                 return false;
             }
 
-            // Validate role
-            const validRoles = ["0", "1", "2"];
+            if (!phonePattern.test(tel)) {
+                alert("Invalid phone number. Only digits are allowed, and it must be between 8 and 15 characters long.");
+                return false;
+            }
+
             if (!validRoles.includes(role)) {
                 alert("Invalid role selected. Please choose a valid role.");
                 return false;
             }
 
-            // If all validations pass, submit the form
             document.getElementById("user").submit();
         }
+
     </script>
 </head>
 
@@ -188,7 +201,7 @@ if ($valid == 1) {
             <input type="email" id="email" name="email" value="<?php echo $user['email']; ?>"><br>
 
             <label for="password">Password:</label>
-            <input type="password" id="password" name="password" value="<?php echo $user['password']; ?>"><br>
+            <input type="password" id="password" name="password" placeholder="Enter new password"><br>
 
             <label for="tel">Phone:</label>
             <input type="text" id="tel" name="tel" value="<?php echo $user['tel']; ?>"><br>
@@ -196,14 +209,13 @@ if ($valid == 1) {
             <label for="adresse">Address:</label>
             <input type="text" id="adresse" name="adresse" value="<?php echo $user['adresse']; ?>"><br>
 
-            <div class="mb-3">
-                <label for="role" class="form-label">Role</label>
-                <select class="form-select" id="role" name="role" required>
-                    <option value="0" <?= $user['role'] == 0 ? 'selected' : '' ?>>Client</option>
-                    <option value="1" <?= $user['role'] == 1 ? 'selected' : '' ?>>Farmer</option>
-                    <option value="2" <?= $user['role'] == 2 ? 'selected' : '' ?>>Admin</option>
-                </select>
-            </div>
+            <label for="role">Role:</label>
+            <select id="role" name="role">
+                <option value="0" <?= $user['role'] == 0 ? 'selected' : '' ?>>Client</option>
+                <option value="1" <?= $user['role'] == 1 ? 'selected' : '' ?>>Farmer</option>
+                <option value="2" <?= $user['role'] == 2 ? 'selected' : '' ?>>Admin</option>
+            </select><br>
+
             <input type="submit" value="Save">
         </form>
     <?php else: ?>

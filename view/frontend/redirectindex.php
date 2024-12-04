@@ -88,20 +88,20 @@
 <header>
     <div class="header-container">
         <div class="logo">
-            <img src="c:/Users/hamza/Downloads/462562198_1103487334732019_7215644507738509228_n.png" alt="AgriPlate Logo" width="120">
+            <img src="462562198_1103487334732019_7215644507738509228_n (1).png" alt="AgriPlate Logo" width="120">
         </div>
         <nav>
-            <a href="index.html">Home</a>
+            <a href="redirectindex.php">Home</a>
             <a href="products.html">Products</a>
             <a href="sellers.html">Sellers</a>
         </nav>
         <div class="user-dropdown">
             <span id="username-display"></span>
-            <img src="c:/Users/hamza/Downloads/user-icon.png" alt="User Icon" class="user-icon" width="40" onclick="toggleUserMenu()">
+            <img src="images/icon.webp" alt="User Icon" class="user-icon" width="40" onclick="toggleUserMenu()">
             <div class="dropdown-menu" id="userDropdown">
                 <a href="cart.html">View Cart</a>
-                <a href="dashboard.html">Dashboard</a>
-                <a href="edit-profile.html">Edit Profile</a> <!-- Edit Profile Option -->
+                <a href="../admin/index.php">Dashboard</a>
+                <a href="updateuser.php">Edit Profile</a>
                 <a href="#" onclick="confirmSignOut()">Sign Out</a>
             </div>
         </div>
@@ -114,9 +114,9 @@
     <section>
         <div class="slideshow">
             <div class="slides" id="slides">
-                <img src="c:/Users/hamza/Downloads/istockphoto-140453734-612x612.jpg" alt="Product 1">
-                <img src="c:/Users/hamza/Downloads/Le-Bec-Hellouin-hotbeds450.jpg" alt="Product 2">
-                <img src="c:/Users/hamza/Downloads/your-image-3.jpg" alt="Product 3">
+                <img src="istockphoto-1127189054-612x612.jpg" alt="Product 1">
+                <img src="istockphoto-140453734-612x612.jpg" alt="Product 2">
+                <img src="Le-Bec-Hellouin-hotbeds450.jpg"  alt="Product 3">
             </div>
             <div class="slideshow-controls">
                 <button class="prev" onclick="prevSlide()">&#10094;</button>
@@ -146,7 +146,7 @@
                 <p>Known for her premium dates from the oasis of Kebili, providing some of the finest Deglet Nour dates in the world.</p>
             </div>
             <div class="farmer-box">
-                <img src="c:/Users/hamza/Downloads/834129898578_166490569900764.jpg" alt="Farmer Habib">
+                <img src="C:\xampp\htdocs\projet web\view\frontend\834129898578_166490569900764.jpg" alt="Farmer Habib">
                 <h3>Farmer Habib</h3>
                 <p>Produces fresh, sustainable vegetables and herbs grown without pesticides in the fertile soil of Sidi Bouzid.</p>
             </div>
