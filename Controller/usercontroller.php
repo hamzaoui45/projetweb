@@ -137,5 +137,36 @@ class UserController
             die('Error: ' . $e->getMessage());
         }
     }
-}
+        // Function to search users by 'nom'
+        public function searchUserByNom($searchTerm) {
+            try {
+                // Get the database connection
+                $db = config::getConnexion();
+                
+                // Prepare the SQL query with LIKE for partial matches
+                $query = "SELECT * FROM user WHERE nom LIKE :searchTerm";
+                
+                // Prepare the statement
+                $stmt = $db->prepare($query);
+    
+                // Bind the search term to the query with wildcard characters for partial matches
+                $stmt->bindValue(':searchTerm', '%' . $searchTerm . '%', PDO::PARAM_STR);
+    
+                // Execute the query
+                $stmt->execute();
+    
+                // Fetch and return the results
+                return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+            } catch (PDOException $e) {
+                // Handle any potential errors
+                error_log("Error in search: " . $e->getMessage());
+                return [];  // Return empty array in case of an error
+            }
+        }
+    }
+    
+    
+    
+
 ?>

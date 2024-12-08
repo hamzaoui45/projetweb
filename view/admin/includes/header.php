@@ -47,12 +47,31 @@ session_start();
       <i class="bi bi-list toggle-sidebar-btn"></i>
     </div><!-- End Logo -->
 
-    <div class="search-bar">
-      <form class="search-form d-flex align-items-center" method="POST" action="#">
-        <input type="text" name="query" placeholder="Lookin for something ?" title="Enter search keyword">
-        <button type="submit" title="Search"><i class="bi bi-search"></i></button>
-      </form>
-    </div><!-- End Search Bar -->
+            <div class="search-bar">
+            <form class="search-form d-flex align-items-center" method="GET" id="searchForm">
+                <select name="action" id="actionSelect" class="form-select" style="margin-right: 10px;">
+                    <option value="clientgesture.php">Search Client Gesture</option>
+                    <option value="index.php">Search Index</option>
+                </select>
+                <input type="text" name="query" placeholder="Looking for something?" title="Enter search keyword" required>
+                <button type="submit" title="Search"><i class="bi bi-search"></i></button>
+            </form>
+        </div>
+                <script>
+                    const searchForm = document.getElementById('searchForm');
+                const actionSelect = document.getElementById('actionSelect');
+
+                // Update form action when selection changes
+                actionSelect.addEventListener('change', function() {
+                    searchForm.action = this.value;
+                });
+
+                // Set initial action to the first dropdown value
+                searchForm.action = actionSelect.value;
+        </script>
+
+
+        <!-- End Search Bar -->
 
     <nav class="header-nav ms-auto">
       <ul class="d-flex align-items-center">

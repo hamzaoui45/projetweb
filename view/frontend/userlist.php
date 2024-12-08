@@ -20,23 +20,59 @@
             margin-top: 20px;
         }
 
-        a.add-user-link {
-            text-decoration: none;
-            color: white;
-            background-color: #4CAF50;
-            padding: 10px 20px;
-            border-radius: 5px;
+        .header-container {
+            width: 90%;
             margin: 20px auto;
-            display: inline-block;
-            text-align: center;
-            font-size: 16px;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
         }
 
-        a.add-user-link:hover {
+        .search-bar {
+            display: flex;
+            margin-right: 10px;
+        }
+
+        .search-bar input {
+            width: 300px;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .search-bar button {
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .search-bar button:hover {
             background-color: #45a049;
         }
 
-        /* Table Styling */
+        /* Add User Button Style */
+        .add-user-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .add-user-button:hover {
+            background-color: #45a049;
+        }
+
+        /* Table and Button Styling */
         table {
             width: 90%;
             margin: 20px auto;
@@ -69,7 +105,6 @@
             font-size: 14px;
         }
 
-        /* Button Styling */
         .action-btn {
             padding: 5px 10px;
             border: none;
@@ -98,14 +133,12 @@
         .delete-btn:hover {
             background-color: #e03e3e;
         }
-
     </style>
     <script>
         // Function to confirm deletion
         function confirmDelete(userId) {
             const confirmation = confirm('Are you sure you want to delete this user?');
             if (confirmation) {
-                // Redirect to the delete script if confirmed
                 window.location.href = `deleteUser.php?id=${userId}`;
             }
         }
@@ -113,41 +146,64 @@
 </head>
 
 <body>
-    <a href="adduser.php" class="add-user-link">Add User</a> <!-- Link to add a new user -->
+    <h1>User List</h1>
+
+    <!-- Header Container (Search Bar + Add User Button) -->
+    <div class="header-container">
+        <!-- Add User Button -->
+        <a href="adduser.php" class="add-user-button">Add User</a>
+
+        <!-- Search Bar -->
+        <div class="search-bar">
+            <form method="GET" action="">
+                <input type="text" name="search" placeholder="Search by First Name (Nom)" value="<?= isset($_GET['search']) ? htmlspecialchars($_GET['search']) : '' ?>">
+                <button type="submit">Search</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- User Table -->
     <table border="1">
         <tr>
-            <th>Id</th>
             <th>First Name</th>
             <th>Last Name</th>
             <th>Email</th>
-            <th>Password</th>
             <th>Phone</th>
             <th>Address</th>
             <th>Role</th>
             <th>Actions</th>
         </tr>
         <?php
-        include "../../Controller/usercontroller.php"; // Assume you have a UserController
+        include "../../Controller/usercontroller.php"; // Include UserController
         $userC = new usercontroller();
-        $list = $userC->userList(); // Fetch the list of users
+        
+        // Get search term from the form submission
+        $search = isset($_GET['search']) ? trim($_GET['search']) : '';
 
+        if ($search) {
+            // Fetch users based on search term
+            $list = $userC->searchUserByNom($search);
+        } else {
+            // Fetch all users if no search term is provided
+            $list = $userC->userList();
+        }
+
+        // Display users in the table
         foreach ($list as $user) {
         ?>
             <tr>
-                <td><?= $user['id']; ?></td>
-                <td><?= $user['nom']; ?></td>
-                <td><?= $user['nomFamille']; ?></td>
-                <td><?= $user['email']; ?></td>
-                <td><?= $user['password']; ?></td>
-                <td><?= $user['tel']; ?></td>
-                <td><?= $user['adresse']; ?></td>
-                <td><?= $user['role']; ?></td>
+                <td><?= ($user['nom']); ?></td>
+                <td><?= ($user['nomFamille']); ?></td>
+                <td><?= ($user['email']); ?></td>
+                <td><?= ($user['tel']); ?></td>
+                <td><?= ($user['adresse']); ?></td>
+                <td><?= ($user['role']); ?></td>
                 <td>
-                    <!-- Form to update user -->
+                    <!-- Update Form -->
                     <form method="POST" action="updateuser.php?id=<?= $user['id'] ?>">
-                        <input type="submit" name="update" value="Update" class="update-btn">  
+                        <input type="submit" name="update" value="Update" class="update-btn">
                     </form>
-                    <!-- Link to delete user with confirmation -->
+                    <!-- Delete Link -->
                     <a href="#" onclick="confirmDelete(<?= $user['id']; ?>)" class="delete-btn">Delete</a>
                 </td>
             </tr>
