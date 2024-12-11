@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Produits de l'événement</title>
-    <img src="app/views/events/bbb.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgriPlate - Agriculture & Food Marketplace</title>
+    <link rel="stylesheet" href="styles.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -28,8 +27,32 @@
         }
     </style>
 </head>
-<body>
+<header>
+    <div class="header-container">
+        <div class="logo">
+            <img src="bbb.png" alt="AgriPlate Logo" width="120">
+        </div>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="products.html">Products</a>
+            <a href="sellers.html">Sellers</a>
+            <a href="index.php?action=participate">Events</a>
 
+        </nav>
+        <div class="auth-buttons">
+            <a href="login.html">Log In</a>
+            <a href="signup.html">Sign Up</a>
+
+        </div>
+        <div class="cart" onclick="toggleCart()">
+            <img src="" alt="Cart Icon">
+            <div class="cart-dropdown" id="cartDropdown">
+                <p>Your cart is empty.</p>
+            </div>
+        </div>
+    </div>
+</header>
+<body>
     <h1>Produits pour l'événement : <?= htmlspecialchars($event['titre']); ?></h1>
     <ul>
         <?php if (!empty($products)): ?>
@@ -44,4 +67,8 @@
     
 
 </body>
+
+<footer>
+    <p>© 2024 AgriPlate. All Rights Reserved. <a href="#">Privacy Policy</a></p>
+</footer>
 </html>

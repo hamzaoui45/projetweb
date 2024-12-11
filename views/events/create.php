@@ -57,16 +57,16 @@
 
     <form method="POST" action="index.php?action=create">
         <label for="titre">Titre de l'événement :</label>
-        <input type="text" id="titre" name="titre" placeholder="Entrez le titre de l'événement" required>
+        <input type="text" id="titre" name="titre" placeholder="Entrez le titre de l'événement" >
 
         <label for="date">Date de l'événement :</label>
-        <input type="date" id="date" name="date" required>
+        <input type="date" id="date" name="date" >
 
-        <label for="long">Longitude :</label>
-        <input type="text" id="long" name="long" placeholder="Entrez la longitude" required>
+        <label for="longi">longiitude :</label>
+        <input type="text" id="longi" name="longi" placeholder="Entrez la longiitude" >
 
         <label for="lat">Latitude :</label>
-        <input type="text" id="lat" name="lat" placeholder="Entrez la latitude" required>
+        <input type="text" id="lat" name="lat" placeholder="Entrez la latitude" >
 
         <!-- Carte interactive -->
         <div id="map"></div>
@@ -95,13 +95,13 @@
 
             // Mettre à jour les champs cachés avec les coordonnées initiales
             document.getElementById('lat').value = defaultLat;
-            document.getElementById('long').value = defaultLng;
+            document.getElementById('longi').value = defaultLng;
 
             // Mettre à jour les coordonnées lorsque le marqueur est déplacé
             marker.on('move', function(e) {
                 const { lat, lng } = e.target.getLatLng();
                 document.getElementById('lat').value = lat;
-                document.getElementById('long').value = lng;
+                document.getElementById('longi').value = lng;
             });
 
             // Mettre à jour la position du marqueur et les champs cachés lorsque la carte est cliquée
@@ -109,7 +109,7 @@
                 const { lat, lng } = e.latlng;
                 marker.setLatLng(e.latlng); // Déplacer le marqueur
                 document.getElementById('lat').value = lat;
-                document.getElementById('long').value = lng;
+                document.getElementById('longi').value = lng;
             });
 
             // Validation de la date pour vérifier qu'elle est dans le futur

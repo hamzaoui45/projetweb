@@ -53,14 +53,21 @@ class EventController
             $this->eventModel->date = $_POST['date'];
             $this->eventModel->longi = $_POST['longi'];
             $this->eventModel->lat = $_POST['lat'];
-
+    
             if ($this->eventModel->update()) {
                 header('Location: index.php');
             }
+        } else {
+            // Récupérer les informations de l'événement pour les afficher
+            $event = $this->eventModel->getEventById($id);
+            if ($event) {
+                include 'views/events/edit.php';
+            } else {
+                echo "Événement non trouvé.";
+            }
         }
-        include 'views/events/edit.php';
     }
-
+    
     public function delete($id)
     {
         $this->eventModel->id = $id;
@@ -71,8 +78,15 @@ class EventController
     public function participate()
     {
         // Récupérer tous les événements
-        $events = $this->eventModel->read();
+   // Récupérer tous les événements
+   $events = $this->eventModel->read();
 
+   $eventsWithAddresses = [];
+   foreach ($events as $event) {
+       $address = $this->get_address_from_coordinates($event['lat'], $event['longi']);
+       $event['address'] = $address;
+       $eventsWithAddresses[] = $event;
+   }
         // Si un événement est sélectionné et que l'utilisateur n'est pas déjà inscrit
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $event_id = $_POST['event_id'];
@@ -157,6 +171,29 @@ class EventController
     // Charger la vue
     require 'views/events/view_event_products.php';
 }
+function get_address_from_coordinates($latitude, $longitude) {
+    $url = "https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=$latitude&lon=$longitude";
+
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'User-Agent: MyApp/1.0 (ibrahimsgh10@gmail.com)', 
+    ]);
+
+    $response = curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+    curl_close($ch);
+
+    if ($httpCode == 200 && $response) {
+        $data = json_decode($response, true);
+        return $data['display_name'] ?? 'Adresse inconnue';
+    } else {
+        return 'Impossible de récupérer l\'adresse';
+    }
+}
+
 
 
 

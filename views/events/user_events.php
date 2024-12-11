@@ -2,10 +2,10 @@
 <html lang="fr">
 
 <head>
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mes événements</title>
-    <img src="app/views/events/bbb.png">
+    <title>AgriPlate - Agriculture & Food Marketplace</title>
+    <link rel="stylesheet" href="styles.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -58,8 +58,53 @@
         }
     </style>
 </head>
+<header>
+    <div class="header-container">
+        <div class="logo">
+            <img src="bbb.png" alt="AgriPlate Logo" width="120">
+        </div>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="products.html">Products</a>
+            <a href="sellers.html">Sellers</a>
+            <a href="index.php?action=participate">Events</a>
 
+        </nav>
+        <div class="auth-buttons">
+            <a href="login.html">Log In</a>
+            <a href="signup.html">Sign Up</a>
+
+        </div>
+        <div class="cart" onclick="toggleCart()">
+            <img src="" alt="Cart Icon">
+            <div class="cart-dropdown" id="cartDropdown">
+                <p>Your cart is empty.</p>
+            </div>
+        </div>
+    </div>
+</header>
 <body>
+
+
+<section>
+        <div class="slideshow">
+            <div class="slides" id="slides">
+                <img src="istockphoto-140453734-170667a.jpg" alt="Product 1">
+                <img src="Le-Bec-Hellouin-hotbeds450.jpg" alt="Product 2">
+                <img src="Le-Bec-Hellouin-hotbeds450.jpg" alt="Product 3">
+            </div>
+            <div class="slideshow-controls">
+                <button class="prev" onclick="prevSlide()">&#10094;</button>
+                <button class="next" onclick="nextSlide()">&#10095;</button>
+            </div>
+
+            <!-- Welcome Text Overlay -->
+            <div class="welcome-overlay">
+                <h1>Welcome to AgriPlate</h1>
+                <p>Your online marketplace connecting farmers and consumers directly.</p>
+            </div>
+        </div>
+    </section>
 
     <h1>Mes événements</h1>
     <div class="card-container">
@@ -82,7 +127,42 @@
             <p>Aucun événement trouvé.</p>
         <?php endif; ?>
     </div>
+    <section class="about-us">
+        <h2>About Us</h2>
+        <p>AgriPlate is an innovative platform dedicated to connecting farmers with consumers, ensuring fresh, locally grown produce reaches your doorstep. We believe in supporting local agriculture and empowering farmers to expand their reach while offering quality products directly to you.</p>
+    </section>
+</main>
+
+<footer>
+    <p>© 2024 AgriPlate. All Rights Reserved. <a href="#">Privacy Policy</a></p>
+</footer>
+
+<script>
+    // Cart Toggle Function
+    function toggleCart() {
+        const cartDropdown = document.getElementById('cartDropdown');
+        cartDropdown.classList.toggle('show');
+    }
+
+    // Slideshow Functions
+    let currentIndex = 0;
+    const slides = document.getElementById('slides');
+    const images = slides.getElementsByTagName('img');
+
+    function prevSlide() {
+        currentIndex = (currentIndex - 1 + images.length) % images.length;
+        updateSlidePosition();
+    }
+
+    function nextSlide() {
+        currentIndex = (currentIndex + 1) % images.length;
+        updateSlidePosition();
+    }
+
+    function updateSlidePosition() {
+        slides.style.transform = `translateX(-${currentIndex * 100}%)`;
+    }
+</script>
 
 </body>
-
 </html>
