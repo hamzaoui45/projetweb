@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Sign Up - AgriPlate</title>
+    <style>
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            padding: 20px;
+        }
+
+        header {
+            background-color: #6bbf73; /* Lighter green */
+            width: 100%;
+            padding: 20px 0;
+            text-align: center;
+            color: white;
+        }
+
+        header .logo img {
+            max-width: 120px;
+            height: auto;
+        }
+
+        nav a {
+            color: white;
+            margin: 0 15px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        h1 {
+            text-align: center;
+            color: #6bbf73; /* Lighter green */
+            margin-bottom: 20px;
+        }
+
+        form {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            max-width: 500px;
+            margin: 0 auto;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        form label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #6bbf73; /* Lighter green */
+        }
+
+        form input[type="text"],
+        form input[type="email"],
+        form input[type="password"],
+        form input[type="phone"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        form input[type="text"]:focus,
+        form input[type="email"]:focus,
+        form input[type="password"]:focus {
+            border-color: #6bbf73; /* Lighter green */
+            outline: none;
+        }
+
+        form button {
+            background-color: #6bbf73; /* Lighter green */
+            color: white;
+            font-size: 16px;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        form button:hover {
+            background-color: #5a9d66; /* Slightly darker shade of green */
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 30px;
+            background-color: #6bbf73; /* Lighter green */
+            color: white;
+            width: 100%;
+        }
+
+        footer p {
+            margin: 0;
+        }
+    </style>
+    <script>
+        function validateClientForm() {
+            let fullName = document.getElementById('full_name').value;
+            let email = document.getElementById('email').value;
+            let password = document.getElementById('password').value;
+            let phone = document.getElementById('phone').value;
+
+            if (fullName == "" || email == "" || password == "" || phone == "") {
+                alert("All fields are required!");
+                return false;
+            }
+            return true;
+        }
+    </script>
+</head>
+<body>
+
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <img src="c:/Users/hamza/Downloads/462562198_1103487334732019_7215644507738509228_n.png" alt="AgriPlate Logo">
+            </div>
+            
+        </div>
+    </header>
+
+    
+    <main>
+        <h1>Client Sign Up</h1>
+        <form action="submit_client_signup.php" method="POST" onsubmit="return validateClientForm()">
+            <label for="full_name">Full Name</label>
+            <input type="text" id="full_name" name="full_name" required>
+
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required>
+
+            <label for="phone">Phone Number</label>
+            <input type="text" id="phone" name="phone" required>
+
+            <button type="submit">Sign Up</button>
+        </form>
+    </main>
+
+    
+    <footer>
+        <p>&copy; 2024 AgriPlate. All rights reserved.</p>
+    </footer>
+</body>
+</html>
