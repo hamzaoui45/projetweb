@@ -9,9 +9,10 @@
         private $tel;
         private $adresse;  
         private $role;
+        private $status;
         
     
-        public function __construct($id, $nom,$nomFamille, $email, $password,$tel, $adress, $role ) {
+        public function __construct($id, $nom,$nomFamille, $email, $password,$tel, $adress, $role, $status= 'Unblocked' ) {
             $this->id = $id;
             $this->nom = $nom;
             $this->nomFamille= $nomFamille;
@@ -20,6 +21,7 @@
             $this->tel= $tel;
             $this->adresse = $adress;
             $this->role = $role;
+            $this->status= $status;
             
         }
     
@@ -165,6 +167,24 @@
         public function setRole($role): self
         {
                 $this->role = $role;
+
+                return $this;
+        }
+
+         /**
+         * Get the value of status
+         */
+        public function getStatus()
+        {
+                return $this->status;
+        }
+
+        /**
+         * Set the value of status
+         */
+        public function setStatus($status): self
+        {
+                $this->status = $status;
 
                 return $this;
         }

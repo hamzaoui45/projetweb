@@ -2,7 +2,7 @@
 session_start();
 include '../../Controller/usercontroller.php';
 include '../../Model/user.php';
-$id = $_GET['id'];
+$id = $_SESSION['User']['id'];
 $error = "";
 // Create an instance of the controller
 $userC = new UserController();
@@ -11,35 +11,29 @@ $user = $userC->getUserById($id); // Fetch the user details
 $valid = 0;
 
 // Check if the form is submitted and required fields are set
-if (
-    isset($_POST["nom"]) &&
-    isset($_POST["nomFamille"]) &&
-    isset($_POST["email"]) &&
-    isset($_POST["password"]) &&
-    isset($_POST["role"]) // Role field
-) {
-    // Server-side validation
-    $exist = $userC->getByEmail($_POST["email"]);
-    $emailPattern = '/^[\w.%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/';
-    $namePattern = '/^[A-Za-z]+$/';
-    $rolePattern = '/^[0-2]$/'; // Role must be 0, 1, or 2
-
-    if (!preg_match($namePattern, $_POST["nom"])) {
-        echo "<script>alert('Invalid first name format. Names should contain only letters.');</script>";
-    } elseif (!preg_match($namePattern, $_POST["nomFamille"])) {
-        echo "<script>alert('Invalid last name format. Names should contain only letters.');</script>";
-    } elseif (!preg_match($emailPattern, $_POST["email"])) {
-        echo "<script>alert('Invalid email format. Please enter a valid email address.');</script>";
-    } elseif (strlen($_POST["password"]) < 6) {
-        echo "<script>alert('Password must be at least 6 characters long.');</script>";
-    } elseif (!preg_match('/^\d{8,15}$/', $_POST["tel"])) { // Assuming 8-15 digit phone numbers
-        echo "<script>alert('Invalid phone number. Only digits are allowed, and it must be between 8 and 15 characters long.');</script>";
-    } elseif ($exist && $exist['id'] != $id) {
-        echo "<script>alert('Email is already in use.');</script>";
-    } elseif (!preg_match($rolePattern, $_POST["role"])) {
-        echo "<script>alert('Invalid role selected. Role must be 0 (Client), 1 (Farmer), or 2 (Admin).');</script>";
-    } else {
-        $valid = 1; // Form validation passed
+if (isset($_POST["submit1"])){
+    if (!empty($_POST["nom"]) &&
+        !empty($_POST["nomFamille"]) &&
+        !empty($_POST["email"]) &&
+        !empty($_POST["tel"]) &&
+        !empty($_POST["adresse"])
+    ) {
+        $emailPattern = '/^[\w.%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/';
+        $namePattern = '/^[A-Za-z]+$/';
+        $exist= $userC->getbyemail($_POST['email']);
+        if (!preg_match($namePattern, $_POST["nom"])) {
+            echo "<script>alert('Invalid first name format. Names should contain only letters.');</script>";
+        } elseif (!preg_match($namePattern, $_POST["nomFamille"])) {
+            echo "<script>alert('Invalid last name format. Names should contain only letters.');</script>";
+        } elseif (!preg_match($emailPattern, $_POST["email"])) {
+            echo "<script>alert('Invalid email format. Please enter a valid email address.');</script>";
+        } elseif (!preg_match('/^\d{8,15}$/', $_POST["tel"])) { // Assuming 8-15 digit phone numbers
+            echo "<script>alert('Invalid phone number. Only digits are allowed, and it must be between 8 and 15 characters long.');</script>";
+        } elseif ($exist && $exist['id']!= $id) {
+            echo "<script>alert('Email is already in use.');</script>";
+        } else {
+            $valid = 1; // Form validation passed
+        }
     }
 }
 
@@ -47,26 +41,22 @@ if ($valid == 1) {
     // Form is valid, proceed with updating the user
 
     // Check if the password has changed; if yes, hash it
-    $password = $_POST["password"];
-    if (!password_verify($password, $user['password'])) { // Avoid rehashing the existing hashed password
-        $password = password_hash($password, PASSWORD_DEFAULT);
-    }
-
-    $updatedRole = intval($_POST['role']); // Capture the selected role as integer
+    $password = $_SESSION["User"]["password"];
+    $updatedRole = $_SESSION["User"]["role"]; 
 
     $user = new User(
         null,
         $_POST["nom"],
         $_POST["nomFamille"],
         $_POST["email"],
-        $password, // Store the hashed password
+        $password,
         $_POST["tel"], // Assuming the phone number remains unchanged
         $_POST["adresse"], // Assuming the address remains unchanged
         $updatedRole
     );
 
     $userC->updateUser($user, $id);
-    header('Location: userlist.php'); // Redirect to the user list page
+    header('Location: index.php'); // Redirect to the user list page
     exit;
 }
 ?>
@@ -109,7 +99,24 @@ if ($valid == 1) {
             padding: 8px;
             margin-top: 5px;
         }
-
+        .button{
+            background-color: red ;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+        }
+        .button1{
+            background-color: orange ;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+        }
         input[type="submit"] {
             background-color: #007BFF;
             color: #fff;
@@ -159,18 +166,8 @@ if ($valid == 1) {
                 return false;
             }
 
-            if (password.length < 6) {
-                alert("Password must be at least 6 characters long.");
-                return false;
-            }
-
             if (!phonePattern.test(tel)) {
                 alert("Invalid phone number. Only digits are allowed, and it must be between 8 and 15 characters long.");
-                return false;
-            }
-
-            if (!validRoles.includes(role)) {
-                alert("Invalid role selected. Please choose a valid role.");
                 return false;
             }
 
@@ -187,10 +184,7 @@ if ($valid == 1) {
 
     <?php if ($user): ?>
         <!-- Fill the form with the user's data -->
-        <form id="user" method="POST" onsubmit="validateForm(event)">
-            <label for="id">User ID:</label>
-            <input type="text" id="id" name="id" readonly value="<?php echo $user['id']; ?>"><br>
-
+        <form id="user" method="POST">
             <label for="nom">First Name:</label>
             <input type="text" id="nom" name="nom" value="<?php echo $user['nom']; ?>"><br>
 
@@ -200,23 +194,24 @@ if ($valid == 1) {
             <label for="email">Email:</label>
             <input type="email" id="email" name="email" value="<?php echo $user['email']; ?>"><br>
 
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" placeholder="Enter new password"><br>
-
             <label for="tel">Phone:</label>
             <input type="text" id="tel" name="tel" value="<?php echo $user['tel']; ?>"><br>
 
             <label for="adresse">Address:</label>
             <input type="text" id="adresse" name="adresse" value="<?php echo $user['adresse']; ?>"><br>
 
-            <label for="role">Role:</label>
-            <select id="role" name="role">
-                <option value="0" <?= $user['role'] == 0 ? 'selected' : '' ?>>Client</option>
-                <option value="1" <?= $user['role'] == 1 ? 'selected' : '' ?>>Farmer</option>
-                <option value="2" <?= $user['role'] == 2 ? 'selected' : '' ?>>Admin</option>
-            </select><br>
+            <br>
 
-            <input type="submit" value="Save">
+            <input type="submit" name="submit1" value="Save">
+        </form>
+        <form method="POST" action="reset_password.php?token=allow&id=<?=$user['id']?>" onsubmit="return confirm('Are you sure you want to change your password ?');">
+            <input type="hidden" name="id" value="<?php echo $user['id']; ?>">
+            <button type="submit" class="button1">Reset password</button>
+        </form>
+         <!-- Delete button -->
+        <form method="POST" action="deleteuser.php" onsubmit="return confirm('Are you sure you want to delete this user?');">
+            <input type="hidden" name="id" value="<?php echo $user['id']; ?>">
+            <button type="submit" class="button">Delete User</button>
         </form>
     <?php else: ?>
         <p style="color: red;">User not found.</p>

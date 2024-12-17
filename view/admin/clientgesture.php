@@ -41,7 +41,7 @@ include 'includes/sidebar.php';
     <h2 class="iframe-title">Clients</h2>
     <iframe 
         name="iframe"
-       src="../frontend/userlist.php" 
+       src="userlist.php?role=Client" 
        class="custom-iframe" 
        title="Custom Embedded Content">
     </iframe>

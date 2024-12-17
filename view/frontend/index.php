@@ -1,3 +1,7 @@
+<?php
+    session_start();
+    $_SESSION["default_token"] ='allow';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -88,24 +92,33 @@
 <header>
     <div class="header-container">
         <div class="logo">
-            <img src="462562198_1103487334732019_7215644507738509228_n (1).png" alt="AgriPlate Logo" width="120">
+            <img src="logo.png" alt="AgriPlate Logo" width="120">
         </div>
         <nav>
-            <a href="redirectindex.php">Home</a>
+            <a href="index.php">Home</a>
             <a href="products.html">Products</a>
             <a href="sellers.html">Sellers</a>
         </nav>
-        <div class="user-dropdown">
-            <span id="username-display"></span>
-            <img src="images/icon.webp" alt="User Icon" class="user-icon" width="40" onclick="toggleUserMenu()">
-            <div class="dropdown-menu" id="userDropdown">
-                <a href="cart.html">View Cart</a>
-                <a href="../admin/index.php">Dashboard</a>
-                <a href="updateuser.php">Edit Profile</a>
-                <a href="#" onclick="confirmSignOut()">Sign Out</a>
+        <?php if (isset($_SESSION['User'])) { ?>
+            <div class="user-dropdown">
+                <span id="username-display"><?php echo htmlspecialchars($_SESSION['User']['nom']); ?></span>
+                <img src="images/icon.webp" alt="User Icon" class="user-icon" width="40" onclick="toggleUserMenu()">
+                <div class="dropdown-menu" id="userDropdown">
+                    <a href="cart.html">View Cart</a>
+                    <?php if ($_SESSION['User']['role'] == 'Farmer') { ?>
+                        <a href="../admin/index.php">Dashboard</a>
+                    <?php } ?>
+                    <a href="updateuser.php">Edit Profile</a>
+                    <a href="logout.php" onclick="confirmSignOut()">Sign Out</a>
+                </div>
             </div>
-        </div>
-        
+        <?php } else { ?>
+            <div class="auth-buttons">
+                <a href="login.html">Log In</a>
+                <a href="signup.html">Sign Up</a>
+            </div>
+        <?php } ?>
+
     </div>
 </header>
 
@@ -207,7 +220,7 @@
 
     function proceedSignOut() {
         // Redirect to index.html
-        window.location.href = "../frontend/index.html";
+        window.location.href = "../frontend/index.php";
     }
 
     function closeModal() {

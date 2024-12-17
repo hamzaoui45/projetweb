@@ -19,6 +19,7 @@ if (isset($_POST["email"]) && isset($_POST["password"])) {
                     window.location.href = 'login.html';
                   }, 100);
                 </script>";
+                exit;
         }
         // Check if user exists
         elseif (!$user) {
@@ -28,30 +29,37 @@ if (isset($_POST["email"]) && isset($_POST["password"])) {
                     window.location.href = 'login.html';
                   }, 100);
                 </script>";
+                exit;
         }
         // Verify the entered password with the stored hashed password
-        elseif (password_verify($hashedPassword,$user['password']) ){
+        elseif (! password_verify($_POST['password'],$user['password']) ){
             echo "<script>
                   alert('Email or password is invalid. Please try again.');
                   setTimeout(function() {
                     window.location.href = 'login.html';
                   }, 100);
                 </script>";
+                exit;
+        } elseif($user['status'] == "Blocked"){
+          echo "<script>
+                  alert('Blocked user can\'t login unless you contact Admin .');
+                  window.location.href = 'index.php';
+                </script>";
+                exit;
         }
         // Successful login
         else {
-            // Save user details in session
-            $_SESSION["User"] = $user;
-
-            // Redirect based on the user's role
-            if ($_SESSION["User"]["role"] == "0") {
-                header('Location: redirectindex.php'); // Redirect to client dashboard
-            } elseif ($_SESSION["User"]["role"] == "1") {
-                header('Location: ../admin/index.php'); // Redirect to farmer dashboard
-            } elseif ($_SESSION["User"]["role"] == "2") {
-                header('Location: ../admin/index.php'); // Redirect to admin dashboard
-            }
-            exit; // Stop further script execution
+          // Save user details in session
+          $_SESSION["User"] = $user;
+          // Redirect based on the user's role
+          if ($_SESSION["User"]["role"] == "Client") {
+              header('Location: index.php'); // Redirect to client dashboard
+          } elseif ($_SESSION["User"]["role"] == "Farmer") {
+              header('Location:index.php'); // Redirect to farmer dashboard
+          } elseif ($_SESSION["User"]["role"] == "Admin") {
+              header('Location: ../admin/index.php'); // Redirect to admin dashboard
+          }
+          exit; // Stop further script execution
         }
     } else {
         echo "<script>

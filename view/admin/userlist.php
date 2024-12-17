@@ -1,3 +1,18 @@
+<?php
+    include "../../Controller/usercontroller.php"; // Include UserController
+    $userC = new usercontroller();
+    
+    // Get search term from the form submission
+    $search = isset($_GET['search']) ? trim($_GET['search']) : '';
+    $role=$_GET['role'];
+    if ($search) {
+        // Fetch users based on search term
+        $list = $userC->searchUserByNom($search);
+    } else {
+        // Fetch all users if no search term is provided
+        $list = $userC->userList($role);
+    }
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -136,22 +151,22 @@
     </style>
     <script>
         // Function to confirm deletion
-        function confirmDelete(userId) {
+        function confirmDelete(userId, role) {
             const confirmation = confirm('Are you sure you want to delete this user?');
             if (confirmation) {
-                window.location.href = `deleteUser.php?id=${userId}`;
+                window.location.href = `delete.php?id=${userId}&role=${encodeURIComponent(role)}`;
             }
         }
     </script>
 </head>
 
 <body>
-    <h1>User List</h1>
+    <h1><?=strtoupper($role)?>S List</h1>
 
     <!-- Header Container (Search Bar + Add User Button) -->
     <div class="header-container">
         <!-- Add User Button -->
-        <a href="adduser.php" class="add-user-button">Add User</a>
+        <a href="../frontend/adduser.php" class="add-user-button">Add User</a>
 
         <!-- Search Bar -->
         <div class="search-bar">
@@ -171,26 +186,11 @@
             <th>Phone</th>
             <th>Address</th>
             <th>Role</th>
+            <th>Status</th>
             <th>Actions</th>
         </tr>
-        <?php
-        include "../../Controller/usercontroller.php"; // Include UserController
-        $userC = new usercontroller();
         
-        // Get search term from the form submission
-        $search = isset($_GET['search']) ? trim($_GET['search']) : '';
-
-        if ($search) {
-            // Fetch users based on search term
-            $list = $userC->searchUserByNom($search);
-        } else {
-            // Fetch all users if no search term is provided
-            $list = $userC->userList();
-        }
-
-        // Display users in the table
-        foreach ($list as $user) {
-        ?>
+        <?php foreach ($list as $user) {?>
             <tr>
                 <td><?= ($user['nom']); ?></td>
                 <td><?= ($user['nomFamille']); ?></td>
@@ -199,12 +199,16 @@
                 <td><?= ($user['adresse']); ?></td>
                 <td><?= ($user['role']); ?></td>
                 <td>
+                    <?= $user['status'];?>
+                    <a href="block.php?id=<?= $user['id']?>"><button class="update-btn">Toggle</button></a>
+                </td>
+                <td>
                     <!-- Update Form -->
-                    <form method="POST" action="updateuser.php?id=<?= $user['id'] ?>">
+                    <form method="POST" action="../frontend/updateuser.php $user['id'] ?>">
                         <input type="submit" name="update" value="Update" class="update-btn">
                     </form>
                     <!-- Delete Link -->
-                    <a href="#" onclick="confirmDelete(<?= $user['id']; ?>)" class="delete-btn">Delete</a>
+                    <button class="delete-btn" onclick="confirmDelete(<?= $user['id'] ?>,'<?= addslashes($role) ?>')">Delete</button>
                 </td>
             </tr>
         <?php

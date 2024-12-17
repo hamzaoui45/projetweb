@@ -57,38 +57,38 @@ include 'includes/sidebar.php';
 
             <!-- Sales Card -->
             <div class="col-xxl-4 col-md-6">
-              <div class="card info-card sales-card">
+                <div class="card info-card sales-card">
 
-                <div class="filter">
-                  <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                    <li class="dropdown-header text-start">
-                      <h6>Filter</h6>
-                    </li>
-
-                    <li><a class="dropdown-item" href="#">Today</a></li>
-                    <li><a class="dropdown-item" href="#">This Month</a></li>
-                    <li><a class="dropdown-item" href="#">This Year</a></li>
-                  </ul>
-                </div>
-
-                <div class="card-body">
-                  <h5 class="card-title">Sales <span>| Today</span></h5>
-
-                  <div class="d-flex align-items-center">
-                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                      <i class="bi bi-cart"></i>
+                    <div class="filter">
+                        <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                            <li class="dropdown-header text-start">
+                                <h6>Filter</h6>
+                            </li>
+                            <li><a class="dropdown-item" href="#" onclick="updateTotals('All')">All</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="updateTotals('Clients')">Clients</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="updateTotals('Farmers')">Farmers</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="updateTotals('Admins')">Admins</a></li>
+                        </ul>
                     </div>
-                    <div class="ps-3">
-                      <h6>145</h6>
-                      <span class="text-success small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">increase</span>
 
+                    <div class="card-body">
+                        <h5 class="card-title">Users <span id="filter-label">| All</span></h5>
+
+                        <div class="d-flex align-items-center">
+                            <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                <i class="bi bi-cart"></i>
+                            </div>
+                            <div class="ps-3">
+                                <h6 id="user-total">0</h6>
+                                <span class="text-muted small pt-2 ps-1">Select a filter to see data</span>
+                            </div>
+                        </div>
                     </div>
-                  </div>
-                </div>
 
-              </div>
-            </div><!-- End Sales Card -->
+                </div>
+            </div>
+            <!-- End Sales Card -->
 
             <!-- Revenue Card -->
             <div class="col-xxl-4 col-md-6">
@@ -243,150 +243,51 @@ include 'includes/sidebar.php';
 
               </div>
             </div><!-- End Reports -->
-
-            <!-- Recent Sales -->
+            <?php if ($_SESSION['User']['role']==='Admin') {?>
+            <!-- User List -->
             <div class="col-12">
-              <div class="card recent-sales overflow-auto">
+                <div class="card user-list overflow-auto">
 
-                <div class="filter">
-                  <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                    <li class="dropdown-header text-start">
-                      <h6>Filter</h6>
-                    </li>
+                    <div class="filter">
+                    <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                        <li class="dropdown-header text-start">
+                        <h6>Filter by Role</h6>
+                        </li>
+                        <li><a class="dropdown-item" href="#" onclick="updateUserList(null)">All</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="updateUserList('Admin')">Admins</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="updateUserList('Client')">Clients</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="updateUserList('Farmer')">Farmers</a></li>
+                    </ul>
+                    </div>
 
-                    <li><a class="dropdown-item" href="#">Today</a></li>
-                    <li><a class="dropdown-item" href="#">This Month</a></li>
-                    <li><a class="dropdown-item" href="#">This Year</a></li>
-                  </ul>
-                </div>
+                    <div class="card-body">
+                    <h5 class="card-title">User List <span id="filter-label">| All</span></h5>
 
-                <div class="card-body">
-                  <h5 class="card-title">Recent Sales <span>| Today</span></h5>
-
-                  <table class="table table-borderless datatable">
+                    <table class="table table-bordered">
                     <thead>
-                      <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Customer</th>
-                        <th scope="col">Product</th>
-                        <th scope="col">Price</th>
-                        <th scope="col">Status</th>
-                      </tr>
-                    </thead>
-                    <tbody>
                         <tr>
-                            <th scope="row"><a href="#">#2457</a></th>
-                            <td>John Doe</td>
-                            <td><a href="#" class="text-primary">Organic Tomatoes</a></td>
-                            <td>$64</td>
-                            <td><span class="badge bg-success">Approved</span></td>
-                          </tr>
-                          <tr>
-                            <th scope="row"><a href="#">#2147</a></th>
-                            <td>Sarah Green</td>
-                            <td><a href="#" class="text-primary">Fresh Carrots</a></td>
-                            <td>$47</td>
-                            <td><span class="badge bg-warning">Pending</span></td>
-                          </tr>
-                          <tr>
-                            <th scope="row"><a href="#">#2049</a></th>
-                            <td>James Greenfield</td>
-                            <td><a href="#" class="text-primary">Local Apples</a></td>
-                            <td>$147</td>
-                            <td><span class="badge bg-success">Approved</span></td>
-                          </tr>
-                          <tr>
-                            <th scope="row"><a href="#">#2644</a></th>
-                            <td>Olivia Brown</td>
-                            <td><a href="#" class="text-primary">Herb Baskets</a></td>
-                            <td>$67</td>
-                            <td><span class="badge bg-danger">Rejected</span></td>
-                          </tr>
-                          <tr>
-                            <th scope="row"><a href="#">#2644</a></th>
-                            <td>Michael Smith</td>
-                            <td><a href="#" class="text-primary">Free-Range Eggs</a></td>
-                            <td>$165</td>
-                            <td><span class="badge bg-success">Approved</span></td>
-                          </tr>
-                          
-            <!-- Top Selling -->
-            <div class="col-12">
-              <div class="card top-selling overflow-auto">
-
-                <div class="filter">
-                  <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                    <li class="dropdown-header text-start">
-                      <h6>Filter</h6>
-                    </li>
-
-                    <li><a class="dropdown-item" href="#">Today</a></li>
-                    <li><a class="dropdown-item" href="#">This Month</a></li>
-                    <li><a class="dropdown-item" href="#">This Year</a></li>
-                  </ul>
-                </div>
-
-                <div class="card-body pb-0">
-                  <h5 class="card-title">Top Selling <span>| Today</span></h5>
-
-                  <table class="table table-borderless">
-                    <thead>
-                      <tr>
-                        <th scope="col">Preview</th>
-                        <th scope="col">Product</th>
-                        <th scope="col">Price</th>
-                        <th scope="col">Sold</th>
-                        <th scope="col">Revenue</th>
-                      </tr>
+                        <th><button class="btn btn-link p-0" onclick="sortUserList('nom')">First Name</button></th>
+                        <th><button class="btn btn-link p-0" onclick="sortUserList('nomFamille')">Last Name</button></th>
+                        <th><button class="btn btn-link p-0" onclick="sortUserList('email')">Email</button></th>
+                        <th>Phone</th>
+                        <th>Address</th>
+                        <th>Role</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                        </tr>
                     </thead>
-                    <tbody>
-                      <tr>
-                        <th scope="row"><a href="#"><img src="assets/img/product-1.jpg" alt=""></a></th>
-                        <td><a href="#" class="text-primary fw-bold">organic Tomatoes</a></td>
-                        <td>$64</td>
-                        <td class="fw-bold">124</td>
-                        <td>$5,828</td>
-                      </tr>
-                      <tr>
-                        <th scope="row"><a href="#"><img src="assets/img/product-2.jpg" alt=""></a></th>
-                        <td><a href="#" class="text-primary fw-bold">fresh apples</a></td>
-                        <td>$46</td>
-                        <td class="fw-bold">98</td>
-                        <td>$4,508</td>
-                      </tr>
-                      <tr>
-                        <th scope="row"><a href="#"><img src="assets/img/product-3.jpg" alt=""></a></th>
-                        <td><a href="#" class="text-primary fw-bold">Dolorib</a></td>
-                        <td>$59</td>
-                        <td class="fw-bold">74</td>
-                        <td>$4,366</td>
-                      </tr>
-                      <tr>
-                        <th scope="row"><a href="#"><img src="assets/img/product-4.jpg" alt=""></a></th>
-                        <td><a href="#" class="text-primary fw-bold">Officiis quaerat sint rerum error</a></td>
-                        <td>$32</td>
-                        <td class="fw-bold">63</td>
-                        <td>$2,016</td>
-                      </tr>
-                      <tr>
-                        <th scope="row"><a href="#"><img src="assets/img/product-5.jpg" alt=""></a></th>
-                        <td><a href="#" class="text-primary fw-bold">Sit unde debitis delectus repellendus</a></td>
-                        <td>$79</td>
-                        <td class="fw-bold">41</td>
-                        <td>$3,239</td>
-                      </tr>
-                    </tbody>
-                  </table>
+                        <tbody id="user-list">
+                        <!-- User rows will be dynamically inserted here -->
+                        </tbody>
+                    </table>
+                    </div>
 
                 </div>
+            </div>
 
-              </div>
-            </div><!-- End Top Selling -->
-
-          </div>
-        </div><!-- End Left side columns -->
+            <!-- User list -->
+            <?php }?>   
 
         <!-- Right side columns -->
         <div class="col-lg-4">
@@ -642,6 +543,119 @@ include 'includes/sidebar.php';
   <script src="../admin/assets/vendor/simple-datatables/simple-datatables.js"></script>
   <script src="../admin/assets/vendor/tinymce/tinymce.min.js"></script>
   <script src="../admin/assets/vendor/php-email-form/validate.js"></script>
+  <script>
+    function updateTotals(filter) {
+        document.getElementById('filter-label').textContent = `| ${filter}`;
+        fetch(`../../Controller/ajaxHandler.php?action=getUserTotals&filter=${filter}`)
+            .then(response => response.json())
+            .then(data => {
+                console.log('Data received:', data); // Debugging log
+                if (data.total !== undefined) {
+                    document.getElementById('user-total').textContent = data.total;
+                } else {
+                    console.error('Invalid data:', data);
+                }
+            })
+            .catch(error => console.error('AJAX Error:', error));
+    }
+
+    // Call the function for 'All' users when the page loads
+    document.addEventListener('DOMContentLoaded', () => {
+        updateTotals('All');
+    });
+    let currentSortColumn = 'id'; // Default sorting column
+    let currentSortOrder = 'ASC'; // Default sorting order
+
+    function updateUserList(role = null) {
+        const filterLabel = document.getElementById('filter-label');
+        const userList = document.getElementById('user-list');
+
+        // Update filter label
+        filterLabel.textContent = `| ${role || 'All'}`;
+
+        // Send AJAX request to fetch filtered and sorted users
+        fetch(`../../Controller/ajaxHandler.php?action=userList&role=${role || ''}&column=${currentSortColumn}&order=${currentSortOrder}`)
+            .then(response => response.json())
+            .then(data => {
+                // Clear the current user list
+                userList.innerHTML = '';
+
+                // Populate the table with the new data
+                data.forEach(user => {
+                    userList.innerHTML += `
+                    <tr>
+                        <td>${user.nom}</td>
+                        <td>${user.nomFamille}</td>
+                        <td>${user.email}</td>
+                        <td>${user.tel}</td>
+                        <td>${user.adresse}</td>
+                        <td>${user.role}</td>
+                        <td>
+                            <span 
+                                class="badge bg-${user.status === 'Blocked' ? 'danger' : 'success'}" 
+                                style="cursor: pointer;"
+                                onclick="toggleStatus(${user.id}, '${user.status}')">
+                                ${user.status}
+                            </span>
+                        </td>
+                        <td>
+                            <!-- Update Button -->
+                            <form method="POST" action="updateuser.php?id=${user.id}" style="display:inline;">
+                                <input type="submit" class="btn btn-primary btn-sm" value="Update">
+                            </form>
+                            <!-- Delete Button -->
+                            <button class="btn btn-danger btn-sm" onclick="confirmDelete(${user.id}, '${role || ''}')">Delete</button>
+                        </td>
+                    </tr>`;
+                });
+            })
+            .catch(error => console.error('Error fetching user list:', error));
+    }
+
+    function sortUserList(column) {
+        // Toggle sort order if the same column is clicked
+        if (currentSortColumn === column) {
+            currentSortOrder = currentSortOrder === 'ASC' ? 'DESC' : 'ASC';
+        } else {
+            // Set the new sorting column and reset to ascending order
+            currentSortColumn = column;
+            currentSortOrder = 'ASC';
+        }
+
+        // Reload the user list with updated sorting
+        updateUserList(null);
+    }
+
+    // Initialize user list on page load
+    document.addEventListener('DOMContentLoaded', () => {
+        updateUserList();
+    });
+
+
+    // Confirm delete action
+    function confirmDelete(userId, role) {
+        if (confirm('Are you sure you want to delete this user?')) {
+            window.location.href = `delete.php?id=${userId}&role=${role}`;
+        }
+    }
+
+    function toggleStatus(userId, currentStatus) {
+        const newStatus = currentStatus === 'Blocked' ? 'Unblocked' : 'Blocked';
+
+        // Send AJAX request to toggle the status
+        fetch(`block.php?id=${userId}&newStatus=${newStatus}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Reload the user list to reflect changes
+                    updateUserList(null);
+                } else {
+                    console.error('Error toggling status:', data.message);
+                }
+            })
+            .catch(error => console.error('Error toggling status:', error));
+    }
+</script>
 
   <!-- Template Main JS File -->
   <script src="../admin/assets/js/main.js"></script>

@@ -1,48 +1,29 @@
-<?php
+<?php 
 require "../../Controller/usercontroller.php";
-session_start();
-$errors = [];
-$email = "";
-
-// Check form submission
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['check-email'])) {
-    $email = trim($_POST['email']);
-
-    // Validate email
-    if (empty($email)) {
-        $errors[] = "Email address is required.";
-    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $errors[] = "Invalid email format.";
-    } else {
-        // Check if the email exists in the database
-        $query = $db->prepare("SELECT * FROM users WHERE email = ?");
-        $query->execute([$email]);
-        $user = $query->fetch(PDO::FETCH_ASSOC);
-
-        if ($user) {
-            // Email exists - generate OTP and save it (or retrieve existing OTP)
-            $otp = rand(100000, 999999);
-            $_SESSION['otp'] = $otp; // Store OTP in session
-            $_SESSION['email'] = $email; // Store email in session
-
-            // Optionally, save OTP to the database
-            $updateQuery = $db->prepare("UPDATE users SET otp = ?, otp_expiry = ? WHERE email = ?");
-            $updateQuery->execute([$otp, date('Y-m-d H:i:s', strtotime('+10 minutes')), $email]);
-
-            // Send OTP to the user's email (you can implement your mail logic here)
-            mail($email, "Your OTP Code", "Your OTP code is: $otp");
-
-            // Redirect to user-otp.php
-            header("Location: user-otp.php");
-            exit;
-        } else {
-            // Email does not exist
-            $errors[] = "This email address is not registered.";
-        }
+require "../../Model/user.php";
+$userc=new UserController();
+if (isset($_POST['submit'])){
+    $email=$_POST['email'];
+    $user=$userc->getbyemail($email);
+    if(!$user){
+        echo "<script>
+                  alert('Please enter an existing email address.');
+                  setTimeout(function() {
+                    window.location.href = 'forgot-password.php';
+                  }, 0);
+                </script>"; 
+    }else{
+        echo "<script>
+                  alert('An email has been sent to the provided address *.');
+                  setTimeout(function() {
+                    window.location.href = 'password_mail.php?email=". $email ."';
+                  }, 0);
+                </script>"; 
     }
+    
 }
-?>
 
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -155,6 +136,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['check-email'])) {
             margin-top: auto; /* Keeps footer at the bottom */
         }
     </style>
+    
 </head>
 <body>
 <header>
@@ -166,17 +148,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['check-email'])) {
 </header>
 
 <main>
-    <form action="forgot-password.php" method="POST" autocomplete="">
+    <form id="forgot-password-form" action="" method="POST" autocomplete="off">
         <h2>Forgot Password</h2>
         <p>Enter your email address to reset your password</p>
-        <?php if (!empty($errors) && count($errors) > 0): ?>
-            <div class="alert">
-                <?php foreach ($errors as $error): ?>
-                    <p><?php echo $error; ?></p>
-                <?php endforeach; ?>
-            </div>
-        <?php endif; ?><input type="email" name="email" placeholder="Enter your email" value="<?php echo $email; ?>">
-        <button type="submit" name="check-email">Continue</button>
+        <input type="email" id="email" name="email" placeholder="Enter your email" required>
+        <button type="submit" name="submit">Continue</button>
     </form>
 </main>
 

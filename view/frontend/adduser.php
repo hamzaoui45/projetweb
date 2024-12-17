@@ -11,8 +11,7 @@ if (
 ) {
     if (
         !empty($_POST["nom"]) && !empty($_POST["nomFamille"]) && !empty($_POST["email"]) &&
-        !empty($_POST["password"]) && !empty($_POST["tel"]) && !empty($_POST["adresse"]) &&
-        ($_POST["role"] === "0" || $_POST["role"] === "1" || $_POST["role"] === "2")
+        !empty($_POST["password"]) && !empty($_POST["tel"]) && !empty($_POST["adresse"]) 
     ) {
         // Hash the password securely
         $hashedPassword = password_hash($_POST["password"], PASSWORD_DEFAULT);
@@ -35,7 +34,7 @@ if (
         $userC->addUser($user);
 
         // Redirect to a user list or success page
-        header('Location:redirectindex.php');
+        header('Location: index.php');
         exit;
     } else {
         $error = "All fields are required, and role must be valid.";

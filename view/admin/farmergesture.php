@@ -39,10 +39,10 @@ include 'includes/sidebar.php';
 
 
   <main id="main" class="main">
-    <h2 class="iframe-title">Embedded Content</h2>
+    <h2 class="iframe-title">Farmers</h2>
     <iframe 
         name="iframe"
-       src="../userlist.php" 
+       src="userlist.php?role=farmer" 
        class="custom-iframe" 
        title="Custom Embedded Content">
     </iframe>
@@ -71,8 +71,8 @@ include 'includes/sidebar.php';
     /* Styling the iframe itself */
     .custom-iframe {
        width: 90%; /* Adjust to your needs */
-       max-width: 800px; /* Prevent it from being too wide */
-       height: 500px;
+       max-width: 1000px; /* Prevent it from being too wide */
+       height: 700px;
        border: 2px solid #ccc;
        border-radius: 8px;
        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);

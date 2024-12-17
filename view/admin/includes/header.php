@@ -39,20 +39,24 @@ session_start();
   <!-- ======= Header ======= -->
   <header id="header" class="header fixed-top d-flex align-items-center">
 
-    <div class="d-flex align-items-center justify-content-between">
-      <a href="index.html" class="logo d-flex align-items-center">
-        <img src="../admin/assets/logo.png" alt="">
-        <span class="d-none d-lg-block">AgriPlate DASHBOARD</span>
+        <div class="d-flex align-items-center justify-content-start">
+            <div class="logo d-flex align-items-center">
+                <!-- Resize the logo using inline CSS or a class -->
+                <a href="index.php">
+                    <img src="..\frontend\logo.png" alt="AgriPlate Logo" style="height: 50px; width: auto; margin-right: 10px;">
+                </a>
+                <!-- Add text next to the logo -->
+                <span class="dashboard-text" style="font-size: 1.5rem; font-weight: bold;">AgriPlate DASHBOARD</span>
+            </div>
+        </div>
+
       </a>
       <i class="bi bi-list toggle-sidebar-btn"></i>
     </div><!-- End Logo -->
 
             <div class="search-bar">
             <form class="search-form d-flex align-items-center" method="GET" id="searchForm">
-                <select name="action" id="actionSelect" class="form-select" style="margin-right: 10px;">
-                    <option value="clientgesture.php">Search Client Gesture</option>
-                    <option value="index.php">Search Index</option>
-                </select>
+                
                 <input type="text" name="query" placeholder="Looking for something?" title="Enter search keyword" required>
                 <button type="submit" title="Search"><i class="bi bi-search"></i></button>
             </form>
